@@ -1,0 +1,32 @@
+module Test;
+
+
+interface IBall {
+    Unit run();
+}
+
+class Ball (Rat damping) implements IBall
+{    
+    physical
+	{		             
+        Rat a = -981/100 : a' = 0;
+		Rat v = 15 : v' = a;
+		Rat x = 10 : x' = v;
+	}
+
+    
+    Unit run()
+    {                        
+        await differential x==0 && v<0;
+        v = -v*damping;      
+        this!run();
+    }
+}
+
+
+//MAIN
+{
+    Rat damping = 8/10 ; 
+    IBall bb = new Ball(damping);
+    
+}
