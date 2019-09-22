@@ -21,7 +21,7 @@ import flags.FlagInterface;
 import flags.HelpFlag;
 import util.ParseHelper;
 
-public class Flywheel {
+public class Flywheel2 {
 
 	java.util.List<FlagInterface> availableFlags;
 	
@@ -30,7 +30,7 @@ public class Flywheel {
 
 	private String fileContent;
 	
-	public Flywheel() {
+	public Flywheel2() {
 		availableFlags = new LinkedList<FlagInterface>();
 		availableFlags.add(new HelpFlag(availableFlags));
 		availableFlags.add(new FileFlag(availableFlags));
@@ -49,77 +49,10 @@ public class Flywheel {
 
 		loadFile();
 
-//		System.out.println(this.fileContent);
-
-		try {
-			String filename = call.get("-f");
-			File file = new File(filename);
-
-			ABSParserWrapper parser = new ABSParserWrapper(new File(filename), true, true);
-			CompilationUnit cUnit = parser.parse(new FileReader(filename));
-
-			List l = new List<>();
-			l.add(cUnit);
-			Model model = new Model(l);
-			
-			Iterator<ASTNode> it = model.astChildIterator();
-			
-			ASTNode<ASTNode> x = it.next();
-			ASTNode<ASTNode> physicalBlock = recursiveTraverserFind(x,"PhysicalImpl");
-			
-//			System.out.println(physicalBlock.value.toString());
-			Iterator<ASTNode> g = physicalBlock.astChildren().iterator();
-//			physicalBlock.
-			System.out.println(physicalBlock.getNumChild());
-			String[] splitted = physicalBlock.value.toString().split("Rat");
-			
-			for(String s : splitted) {
-
-				if(s.contains("DifferentialExp")) {
-
-					System.out.println(s);
-					System.out.println(ParseHelper.extractBlock(s,8));
-				}
-			}
-//			System.out.println(x);
-//			physicalBlock = recursiveTraverserFind(x,"DifferentialExp");
-//			System.out.println(physicalBlock.value);
-			
-			/*while (g.hasNext()) {
-				System.out.println(g.next());
-				System.out.println("It");
-			}
-			*/
-
-			/*
-			String parsed = model.value.toString();
-			int startOfPhysical = parsed.indexOf("Physical");
-			String part = ParseHelper.extractBlock(parsed,startOfPhysical);
-			
-			System.out.println(part);
-			*/
-			/*
-			 * Iterator<ASTNode> it = model.astChildIterator(); recursivePrinter(it.next());
-			 * System.out.println(it.next().value);
-			 * 
-			 * System.out.println(cUnit.getDeltaDeclList());
-			 * System.out.println(cUnit.getNumChild());
-			 * 
-			 * 
-			 * while (it.hasNext()) { it.next().astChildIterator();
-			 * System.out.println(it.next()); System.out.println("-"); }
-			 * 
-			 * 
-			 */
-		} catch (Exception e) {
-			System.out.println(e);
-			System.exit(-1);
-		}
 	}
 
 	private void loadFile() {
 		String k = null;
-		System.out.println(call.keySet());
 		Iterator<String> iterator = call.keySet().iterator();
 		while (iterator.hasNext())
 			if ((k = iterator.next()).equals("-f")) {
@@ -147,30 +80,15 @@ public class Flywheel {
 	}
 
 	private void evaluateArguments() {
-		String k = null;
-		System.out.println(call.keySet());
-		Iterator<String> iterator = call.keySet().iterator();
-		while (iterator.hasNext())
-			k = iterator.next();
-		if (k.equals("-help"))
-			;
+		for(FlagInterface flag: availableFlags) {
+			flag.performe();
+		}
 
 	}
 
 	private void readArguments(String[] args) {
-		/*for (int i = 0; i < args.length; i++) {
-				if (contains(flags, args[i].toLowerCase()))
-					if (i + 1 != args.length)
-						call.put(args[i], args[i + 1]);
-			}
-		*/
-	}
-
-	private boolean contains(String[] array, String element) {
-		for (String e : array)
-			if (e.equals(element))
-				return true;
-		return false;
+		for(FlagInterface flag : availableFlags)
+			flag.readArgList(args);
 	}
 
 	public static void recursivePrinter(ASTNode node) {
