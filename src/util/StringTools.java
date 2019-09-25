@@ -22,4 +22,17 @@ public class StringTools {
 				return i;
 		return -1;
 	}
+	public static int getClosingBracket(String full, int openingBracket) {
+		int open = 0;
+		for(int index = openingBracket;full.length() != index;index++) {
+			if(full.charAt(index) == '(')
+				open++;
+			else if(full.charAt(index) == ')')
+				open--;
+			if(open== 0)
+				return index;
+		}
+		
+		return -1;
+	}
 }
