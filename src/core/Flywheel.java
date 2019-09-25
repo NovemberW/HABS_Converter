@@ -1,6 +1,8 @@
 package core;
 
 import java.io.File;
+
+import util.NodeUtil;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -40,19 +42,19 @@ public class Flywheel {
 
 	public void work(String[] args) {
 
-		System.out.println("Starting Tool...");
+		System.out.println("Starting other Tool...");
 
 		call = new HashMap<String, String>();
 		readArguments(args);
 
-		evaluateArguments();
+//		evaluateArguments();
 
-		loadFile();
+//		loadFile();
 
 //		System.out.println(this.fileContent);
 
 		try {
-			String filename = call.get("-f");
+			String filename = "exampleFiles/BouncingBall.abs";
 			File file = new File(filename);
 
 			ABSParserWrapper parser = new ABSParserWrapper(new File(filename), true, true);
@@ -62,6 +64,31 @@ public class Flywheel {
 			l.add(cUnit);
 			Model model = new Model(l);
 			
+			Iterator<ASTNode> it = model.astChildIterator();
+			
+			ASTNode<ASTNode> x = it.next();
+//			System.out.println(x);
+//			System.out.println(NodeUtil.recursiveFind_PhysicalImpl(x));
+//			System.out.println(NodeUtil.recursiveFind_PhysicalImpl(x).value);
+			String fullPhysical = NodeUtil.recursiveFind_PhysicalImpl(x).toString();
+			String[] parts = fullPhysical.split("DifferentialExp");
+			java.util.List<String> continousVariables = new LinkedList<String>();
+			for(String s : parts) {
+//				System.out.println(s);
+				int ratIndex = s.indexOf("Rat");
+				if(ratIndex != -1) {
+					int eqIndex = s.indexOf("=", ratIndex);
+					continousVariables.add(s.substring(ratIndex +3,eqIndex).trim());
+				}
+			}
+			
+//			it = x.astChildIterator();
+//			while(it.hasNext())
+//				System.out.println(NodeUtil.recursiveFind_DifferentialExp(it.next()));
+			
+//			System.out.println(model.getDecls());
+//			System.out.println(model.getUpdateDecls());
+		/*	
 			Iterator<ASTNode> it = model.astChildIterator();
 			
 			ASTNode<ASTNode> x = it.next();
@@ -81,6 +108,7 @@ public class Flywheel {
 					System.out.println(ParseHelper.extractBlock(s,8));
 				}
 			}
+			*/
 //			System.out.println(x);
 //			physicalBlock = recursiveTraverserFind(x,"DifferentialExp");
 //			System.out.println(physicalBlock.value);

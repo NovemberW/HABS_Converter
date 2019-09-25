@@ -19,6 +19,7 @@ import flags.FileFlag;
 import flags.FilePrintFlag;
 import flags.FlagInterface;
 import flags.HelpFlag;
+import info.ContentModel;
 import util.ParseHelper;
 
 public class Flywheel2 {
@@ -49,6 +50,20 @@ public class Flywheel2 {
 
 		loadFile();
 
+		ContentModel contentModel = new ContentModel();
+		String fileName = null;
+		
+		for(FlagInterface fI : availableFlags)
+			if(fI instanceof FileFlag)
+				fileName = ((FileFlag) fI).getFileName();
+		
+		try {
+			contentModel.extractInfo(fileName);
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.exit(-1);
+		}
+		
 	}
 
 	private void loadFile() {
