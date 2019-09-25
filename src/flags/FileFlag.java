@@ -14,6 +14,14 @@ public class FileFlag extends FlagInterface {
 	
 	private String fileName = null;
 	
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+
 	private String fileContent = null;
 
 	public FileFlag(java.util.List<FlagInterface> flagList) {
@@ -57,7 +65,6 @@ public class FileFlag extends FlagInterface {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 	}
 	
 	public String getFileContent() {
