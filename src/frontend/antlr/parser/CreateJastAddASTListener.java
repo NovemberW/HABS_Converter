@@ -4,7 +4,6 @@
  */
 package frontend.antlr.parser;
 
-import abs.frontend.antlr.parser.ABSParser.Type_useContext;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -20,7 +19,6 @@ import abs.frontend.antlr.parser.ABSParser.PhysicalContext;
 import abs.frontend.antlr.parser.ABSParser.TraitApplyFragmentContext;
 import abs.frontend.antlr.parser.ABSParser.TraitNameFragmentContext;
 import abs.frontend.antlr.parser.ABSParser.TraitSetFragmentContext;
-import abs.frontend.antlr.parser.ABSParser.Trait_operContext;
 import abs.frontend.ast.*;
 
 /**
