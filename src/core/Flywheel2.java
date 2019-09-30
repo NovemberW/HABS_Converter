@@ -50,7 +50,7 @@ public class Flywheel2 {
 
 		loadFile();
 
-		ContentModel contentModel = new ContentModel();
+		ContentModel contentModel = new ContentModel(availableFlags);
 		String fileName = null;
 		
 		for(FlagInterface fI : availableFlags)
@@ -59,6 +59,7 @@ public class Flywheel2 {
 		
 		try {
 			contentModel.extractInfo(fileName);
+			System.out.println(contentModel.toString());
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.exit(-1);
