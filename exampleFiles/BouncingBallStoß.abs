@@ -1,0 +1,50 @@
+module Test;
+import * from ABS.Scheduler;
+import * from ABS.Meta;
+
+interface IBall {
+    Unit jump();
+	Unit interrupt(Rat interruptionTime, Rat vfaktor);
+}
+
+class Ball (Rat damping) implements IBall
+{
+    physical
+	{
+		Rat a = -981/100 : a' = 0;
+		Rat v = 15 : v' = a;
+		Rat x = 10 : x' = v;
+	}
+
+    
+    Unit jump()
+    {                  
+        await differential x==0 && v<0;        
+println("Done:" + toString(now()));       
+        v = -v*damping;            
+        
+        this!jump();
+    }
+	
+	Unit interrupt(Rat interruptionTime, Rat vfaktor)
+	{            
+        await duration (interruptionTime,interruptionTime);     
+        v=v*vfaktor;        
+        println("Interrupted at:" + toString(now()));       
+	}
+}
+
+//MAIN
+{
+	println("Main");
+    Rat damping = 8/10 ; 
+	IBall bb = new Ball(damping);    
+
+    bb!jump();
+    bb!interrupt(6,-15/10);    
+    bb!interrupt(125/10,-15/10);
+    
+    //Example Multiple 
+    //bb!interrupt(6,-15/10);    
+    //bb!interrupt(8,-15/10);
+}

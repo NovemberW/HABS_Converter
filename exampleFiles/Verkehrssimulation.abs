@@ -1,0 +1,113 @@
+module Test;
+
+
+interface ICar {
+    Unit drive();
+    Unit checkAbs();
+    Unit tempomat();
+    Rat getPosition(Rat timeAt);
+}
+
+class Car (Rat acceleration, Rat maxSpeed, ICar frontCar) implements ICar
+{    
+    Bool bremsen = False;        
+    physical
+	{		       
+        Rat a = acceleration : a' = 0;
+		Rat v = 0 : v' = a;
+		Rat x = 0 : x' = v;
+        Rat time = 0;
+        Rat mS = maxSpeed;
+        Rat testAdd = 42/1337;
+	}
+
+    
+    Unit drive()
+    {        
+        time = timeValue(now()) + 10;  
+        
+        await differential t==time;         
+        println("Drive End:" + toString(timeValue(now())));
+        this!drive(); 
+    }
+
+    Unit tempomat()
+    {          
+        if(a>0)
+        {              
+            await differential v==mS;  
+            if (a>0)   // Falls es sich in der Zwischenzeit geändert hat
+            {     
+                a=0;
+            }
+        }
+        else 
+        {
+            await duration(1,1);
+        }
+        
+        this!tempomat(); 
+    }
+
+    Unit checkAbs()
+    {        
+        await duration(1,1);
+        
+        Fut<Rat> q  = frontCar!getPosition(0);
+        Rat result = q.get;
+        
+        Rat abs = result-x;             
+        if(abs < (v*3))
+        {  
+            a=-5;
+            await differential v == 0;
+            a=5;
+        } 
+        
+        this!checkAbs();        
+    }
+    
+    Rat getPosition(Rat timeAt)
+    {
+        await duration(0,0);  
+        return x;
+    }
+}
+
+
+//MAIN
+{
+	println("Main");
+    ICar carA = new Car(2,30, null);
+    ICar carB = new Car(4,35, carA);
+    
+	Fut<Unit> fut1 = carA!drive();
+    carA!tempomat();
+    
+    await duration(3,3);    
+    
+    Fut<Unit> futB1 = carB!drive();
+    Fut<Unit> futB2 = carB!checkAbs();    
+    carB!tempomat();
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
