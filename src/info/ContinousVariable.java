@@ -11,21 +11,34 @@ public class ContinousVariable {
 
 	private String formula;
 
-	public ContinousVariable(String DifferentialExp) {
-		extractContinousVariable(DifferentialExp);
+	String filecontent;
+
+	public ContinousVariable(String var, String filecontent) {
+		this.filecontent = filecontent;
+		name = var;
+		extractContinousVariable();
+
 	}
 
-	private void extractContinousVariable(String diffExp) {
-		name = diffExp.substring(0, diffExp.indexOf("="));
+	private void extractContinousVariable() {
+		
 
-		int z = diffExp.indexOf("(", diffExp.indexOf("(") + 1);
-		int initFormula_Komma = StringTools.getClosingBracket(diffExp, z )+2;
-		initialValue = diffExp.substring(z + 1, StringTools.getClosingBracket(diffExp, z));
-		formula = diffExp.substring(initFormula_Komma,diffExp.length()-1);
-//		System.out.println(formula);
-//		System.out.println(diffExp);
+		String[] lines = filecontent.split(System.lineSeparator());
 
-	
+		for (int i = 0; i < lines.length; i++)
+			lines[i] = lines[i].replaceAll(" ", " ").trim();
+
+		for (int i = 0; i < lines.length; i++)
+			if (lines[i].startsWith("Rat " + name)) {
+				String[] exp = lines[i].substring(("Rat " + name).length() + 2).trim().split(":");
+				initialValue = exp[0];
+				if(exp.length == 2)
+					formula = StringTools.removeSemicolon(exp[1]);
+				else
+					formula = "";
+				break;
+			}
+//			System.out.println(lines[i]);
 	}
 
 	@Override
@@ -33,7 +46,7 @@ public class ContinousVariable {
 		StringBuffer sb = new StringBuffer();
 		sb.append("Name: ");
 		sb.append(name);
-		sb.append(" ini: ");
+		sb.append(" init: ");
 		sb.append(initialValue);
 		sb.append(" formula: ");
 		sb.append(formula);
