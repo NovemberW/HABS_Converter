@@ -12,8 +12,9 @@ public class NodeUtil {
 	public static ASTNode<ASTNode> recursiveFind_PhysicalImpl(ASTNode<ASTNode> node) {
 		if (node == null)
 			return null;
-		if (node instanceof PhysicalImpl)
+		if (node instanceof PhysicalImpl) {
 			return node;
+		}
 
 		Iterator<ASTNode> it = node.astChildIterator();
 

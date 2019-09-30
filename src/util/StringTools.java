@@ -35,4 +35,10 @@ public class StringTools {
 		
 		return -1;
 	}
+	public static String removeSemicolon(String in) {
+		if(in == null)
+			return null;
+		
+		return in.replaceAll(";","");
+	}
 }
