@@ -29,5 +29,21 @@ public class AwaitGroups {
 	public void setLines(java.util.List<String> lines) {
 		this.lines = lines;
 	}
+	
+	@Override
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		
+		sb.append(await);
+		sb.append("\n");
+		
+		for(String line : lines) {
+			sb.append("\t");
+			sb.append(line);
+			sb.append("\n");
+		}
+		
+		return sb.toString();
+	}
 
 }

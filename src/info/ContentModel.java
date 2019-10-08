@@ -25,7 +25,7 @@ public class ContentModel {
 	private java.util.List<ContinousVariable> continousVariables;
 
 	private java.util.List<FlagInterface> availableFlags;
-	
+
 	private java.util.List<AwaitGroups> awaitGroups;
 
 	public ContentModel(java.util.List<FlagInterface> availableFlags) {
@@ -67,7 +67,7 @@ public class ContentModel {
 		String[] lines = fileContent.split(System.lineSeparator());
 
 		extractAwaits(segment, lines);
-		
+
 	}
 
 	private void extractAwaits(java.util.List<String> segment, String[] lines) {
@@ -111,6 +111,13 @@ public class ContentModel {
 		for (ContinousVariable cV : continousVariables) {
 			sb.append(cV.toString());
 			sb.append(System.lineSeparator());
+		}
+
+		sb.append("\n");
+
+		for (AwaitGroups aG : awaitGroups) {
+			sb.append(aG.toString());
+			sb.append("\n");
 		}
 
 		return sb.toString();
