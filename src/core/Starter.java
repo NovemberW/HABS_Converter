@@ -7,9 +7,9 @@ public class Starter {
 
 	public static void main(String[] args) {
 		Flywheel2 fw = new Flywheel2();
-//		String[] args2 = new String[]{"starter","-f","./exampleFiles/BouncingBall.abs"};
+		String[] args2 = new String[]{"starter","-f","./exampleFiles/BouncingBall.abs"};
 
-		String[] args2 = new String[] { "starter", "-f", "./exampleFiles/Verkehrssimulation.abs" };
+//		String[] args2 = new String[] { "starter", "-f", "./exampleFiles/Verkehrssimulation.abs" };
 		fw.work(args2);
 
 //		Flywheel f = new Flywheel();

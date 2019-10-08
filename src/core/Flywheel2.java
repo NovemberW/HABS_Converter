@@ -29,7 +29,6 @@ public class Flywheel2 {
 
 	private static HashMap<String, String> call;
 
-	private String fileContent;
 	
 	public Flywheel2() {
 		availableFlags = new LinkedList<FlagInterface>();
@@ -43,12 +42,9 @@ public class Flywheel2 {
 
 		System.out.println("Starting Tool...");
 
-		call = new HashMap<String, String>();
 		readArguments(args);
 
 		evaluateArguments();
-
-		loadFile();
 
 		ContentModel contentModel = new ContentModel(availableFlags);
 		String fileName = null;
@@ -67,34 +63,6 @@ public class Flywheel2 {
 		
 	}
 
-	private void loadFile() {
-		String k = null;
-		Iterator<String> iterator = call.keySet().iterator();
-		while (iterator.hasNext())
-			if ((k = iterator.next()).equals("-f")) {
-				FileReader fr = null;
-				try {
-					File file = new File(call.get(k));
-					FileInputStream fis = new FileInputStream(file);
-					byte[] data = new byte[(int) file.length()];
-					fis.read(data);
-					fis.close();
-
-					fileContent = new String(data, "UTF-8");
-				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (UnsupportedEncodingException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-			}
-	}
-
 	private void evaluateArguments() {
 		for(FlagInterface flag: availableFlags) {
 			flag.performe();
@@ -105,19 +73,6 @@ public class Flywheel2 {
 	private void readArguments(String[] args) {
 		for(FlagInterface flag : availableFlags)
 			flag.readArgList(args);
-	}
-
-	public static void recursivePrinter(ASTNode node) {
-		if (node == null)
-			return;
-		System.out.println(node.value);
-		Iterator<ASTNode> it = node.astChildIterator();
-//		if(!it.hasNext())
-//			System.out.println(node.value);
-
-		while (it.hasNext()) {
-			recursivePrinter(it.next());
-		}
 	}
 	
 	public static ASTNode<ASTNode> recursiveTraverserFind(@SuppressWarnings("rawtypes") ASTNode node, String startText) {
