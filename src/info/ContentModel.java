@@ -9,6 +9,7 @@ import java.util.LinkedList;
 
 import abs.frontend.antlr.parser.ABSParserWrapper;
 import abs.frontend.ast.ASTNode;
+import abs.frontend.ast.AwaitStmt;
 import abs.frontend.ast.CompilationUnit;
 import abs.frontend.ast.FieldDecl;
 import abs.frontend.ast.List;
@@ -54,8 +55,46 @@ public class ContentModel {
 		Iterator<FieldDecl> fieldIterator = ((PhysicalImpl) physicalBlock).getFieldList().iterator();
 
 		while (fieldIterator.hasNext()) {
-			FieldDecl fD = fieldIterator.next(); 
-			continousVariables.add(new ContinousVariable(fD.getName(),fileContent));
+			FieldDecl fD = fieldIterator.next();
+			continousVariables.add(new ContinousVariable(fD.getName(), fileContent));
+		}
+
+		java.util.List<String> segment = new LinkedList<String>();
+
+		String[] lines = fileContent.split(System.lineSeparator());
+
+		for (int i = 0; i < lines.length; i++)
+			lines[i] = lines[i].replaceAll(" ", " ").trim();
+
+		for (int i = 0; i < lines.length; i++) {
+			if (lines[i].contains("await")) {
+				i++;// Skipping the line with await
+				boolean end = false;
+				for (; i < lines.length && !end; i++) {
+					if (lines[i].contains("!")) {
+						for(String p : segment)
+							System.out.println(p);
+						segment = new LinkedList<String>();
+						end = true;
+					}
+					segment.add(lines[i]);
+				}
+			}
+		}
+		
+//		recursivePrinter(root);
+	}
+
+	public static void recursivePrinter(ASTNode node) {
+		if (node == null)
+			return;
+		System.out.println(node.value);
+		Iterator<ASTNode> it = node.astChildIterator();
+//		if(!it.hasNext())
+//			System.out.println(node.value);
+
+		while (it.hasNext()) {
+			recursivePrinter(it.next());
 		}
 	}
 
