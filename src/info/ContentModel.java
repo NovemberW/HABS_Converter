@@ -25,10 +25,13 @@ public class ContentModel {
 	private java.util.List<ContinousVariable> continousVariables;
 
 	private java.util.List<FlagInterface> availableFlags;
+	
+	private java.util.List<AwaitGroups> awaitGroups;
 
 	public ContentModel(java.util.List<FlagInterface> availableFlags) {
 		continousVariables = new LinkedList<ContinousVariable>();
 		this.availableFlags = availableFlags;
+		this.awaitGroups = new LinkedList<AwaitGroups>();
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -63,17 +66,22 @@ public class ContentModel {
 
 		String[] lines = fileContent.split(System.lineSeparator());
 
+		extractAwaits(segment, lines);
+		
+	}
+
+	private void extractAwaits(java.util.List<String> segment, String[] lines) {
 		for (int i = 0; i < lines.length; i++)
 			lines[i] = lines[i].replaceAll(" ", " ").trim();
 
 		for (int i = 0; i < lines.length; i++) {
 			if (lines[i].contains("await")) {
+				String awaitStatement = lines[i];
 				i++;// Skipping the line with await
 				boolean end = false;
 				for (; i < lines.length && !end; i++) {
 					if (lines[i].contains("!")) {
-						for(String p : segment)
-							System.out.println(p);
+						awaitGroups.add(new AwaitGroups(awaitStatement, segment));
 						segment = new LinkedList<String>();
 						end = true;
 					}
@@ -81,8 +89,6 @@ public class ContentModel {
 				}
 			}
 		}
-		
-//		recursivePrinter(root);
 	}
 
 	public static void recursivePrinter(ASTNode node) {
@@ -108,6 +114,14 @@ public class ContentModel {
 		}
 
 		return sb.toString();
+	}
+
+	public java.util.List<AwaitGroups> getAwaitGroups() {
+		return awaitGroups;
+	}
+
+	public void setAwaitGroups(java.util.List<AwaitGroups> awaitGroups) {
+		this.awaitGroups = awaitGroups;
 	}
 
 }
