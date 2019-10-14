@@ -1,0 +1,38 @@
+interface Tank{
+	Unit inDrain(Real newD);
+	Real outLevel();
+}
+class Tank(Real inVal) implements Tank{
+	physical {
+		Real level = inVal : level' = drain;
+		REal drain = -1/2 _ drain' = 0;
+	}
+	
+	Unit run(){
+	
+	}
+	Unit inDrain(Real newD) {
+		drain = newD;
+	}
+	Real outLevel(){
+		return level;
+	}
+}
+class FlowCtrl(Tank t, Real tick){
+	Real drain = 1/2;
+	Real level = 0;
+	
+	Unit run(){
+		this!ctrlFlow();
+	}
+	Unit ctrlFlow(){
+		await duration(thick,thick);
+		level  = t.outLevel();
+		if(level <= 3.5)
+			drain = 1/2;
+		if(level >= 9.5)
+			drain = -1/2;
+		t!inDrain(drain);
+		this.ctrlFlow();
+	}
+}

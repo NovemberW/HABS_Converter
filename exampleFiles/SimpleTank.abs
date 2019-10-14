@@ -1,0 +1,19 @@
+class CSignleTank(Real inVal){
+	physical{
+		Real level = inVal : level' = drain;
+		Real drain = -1/2 : drain' = 0;
+	}
+	
+	Unit run() {
+		this!ctrl();
+	}
+
+	Unit ctrl(){
+		await diff (level <= 3 & drain <= 0) | (level >= 10 & drain >= 0);
+		if(level <= 3)
+			drain = 1/2;
+		else 
+			drain = -1/2;
+		this!ctrl();
+	}
+}
