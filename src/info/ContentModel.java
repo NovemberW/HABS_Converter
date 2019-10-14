@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import abs.frontend.antlr.parser.ABSParserWrapper;
 import abs.frontend.ast.ASTNode;
 import abs.frontend.ast.AwaitStmt;
+import abs.frontend.ast.ClassDecl;
 import abs.frontend.ast.CompilationUnit;
 import abs.frontend.ast.FieldDecl;
 import abs.frontend.ast.List;
@@ -27,11 +28,14 @@ public class ContentModel {
 	private java.util.List<FlagInterface> availableFlags;
 
 	private java.util.List<AwaitGroups> awaitGroups;
+	
+	private java.util.List<ClassContent> classes;
 
 	public ContentModel(java.util.List<FlagInterface> availableFlags) {
 		continousVariables = new LinkedList<ContinousVariable>();
 		this.availableFlags = availableFlags;
 		this.awaitGroups = new LinkedList<AwaitGroups>();
+		this.classes = new LinkedList<ClassContent>();
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -59,6 +63,8 @@ public class ContentModel {
 
 		while (fieldIterator.hasNext()) {
 			FieldDecl fD = fieldIterator.next();
+//			System.out.println("-> " + fD.getName());
+//			System.out.println("-> " + fD);
 			continousVariables.add(new ContinousVariable(fD.getName(), fileContent));
 		}
 
@@ -66,8 +72,20 @@ public class ContentModel {
 
 		String[] lines = fileContent.split(System.lineSeparator());
 
-		extractAwaits(segment, lines);
+		extractFunctions(lines);
+		
+//		extractAwaits(segment, lines);
+		java.util.List<ASTNode<ASTNode>> list = new LinkedList<ASTNode<ASTNode>>();
+		NodeUtil.recursiveFind_ClassDecl(root, list);
+		
+		for (ASTNode<ASTNode> classDecl : list) {
+			classes.add(new ClassContent((ClassDecl) classDecl));
+		}
+		
+	}
 
+	private void extractFunctions(String[] lines) {
+		
 	}
 
 	private void extractAwaits(java.util.List<String> segment, String[] lines) {
@@ -79,8 +97,17 @@ public class ContentModel {
 				String awaitStatement = lines[i];
 				i++;// Skipping the line with await
 				boolean end = false;
+				int openBrackets = -1;
 				for (; i < lines.length && !end; i++) {
-					if (lines[i].contains("!")) {
+					String line = lines[i];
+					for(char c : line.toCharArray()) {
+						if(c == '{') 
+							openBrackets++;
+						if(c == '}')
+							openBrackets--;
+					}
+//					System.out.println(openBrackets);
+					if (lines[i].contains("!") || openBrackets == 0) {
 						awaitGroups.add(new AwaitGroups(awaitStatement, segment));
 						segment = new LinkedList<String>();
 						end = true;
@@ -130,5 +157,21 @@ public class ContentModel {
 	public void setAwaitGroups(java.util.List<AwaitGroups> awaitGroups) {
 		this.awaitGroups = awaitGroups;
 	}
+	
+	public static ASTNode<ASTNode> recursiveTraverserFind(@SuppressWarnings("rawtypes") ASTNode node, String startText) {
+		if (node == null)
+			return null;
+		if(node.value.toString().startsWith(startText))
+			return node;
+//		System.out.println(node.value);
+		Iterator<ASTNode> it = node.astChildIterator();
+
+		ASTNode<ASTNode> akku = null;
+		while (it.hasNext() && akku == null) {
+			akku = recursiveTraverserFind(it.next(),startText);
+		}
+		return akku;
+	}
+
 
 }
