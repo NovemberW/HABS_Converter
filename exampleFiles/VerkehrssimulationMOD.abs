@@ -1,0 +1,47 @@
+module Test;
+
+interface ICar {
+    Unit drive();
+    Unit checkAbs();
+    Unit tempomat();
+    Rat getPosition(Rat timeAt);
+}
+
+class Car (Rat acceleration, Rat maxSpeed, ICar frontCar) implements ICar{    
+    physical{		       
+        Rat a = acceleration : a' = 0;
+		Rat v = 0 : v' = a;
+		Rat x = 0 : x' = v;
+        Rat time = 0;
+        Rat mS = maxSpeed;
+        Rat testAdd = 42/1337;
+	}
+    
+    Unit drive(){        
+        time = timeValue(now()) + 10;  
+        await differential t==time;         
+        this!drive(); 
+    }
+
+    Unit tempomat(){          
+		await differential v==mS;  
+        if (a>0){
+		    a=0;
+        }
+        this!tempomat(); 
+    }
+}
+
+//MAIN
+{
+    ICar carA = new Car(2,30, null);
+    ICar carB = new Car(4,35, carA);
+    
+	Fut<Unit> fut1 = carA!drive();
+    carA!tempomat();
+    
+    Fut<Unit> futB1 = carB!drive();
+    Fut<Unit> futB2 = carB!checkAbs();    
+    carB!tempomat();
+    
+}
