@@ -9,33 +9,58 @@ import util.NodeUtil;
 
 public class ClassContent {
 	java.util.List<Method> methods;
-	
+
 	java.util.List<String> parameter;
-	
+
 	String name;
-	
+
 	public ClassContent(ClassDecl classDecl) {
 		System.out.println(classDecl.toString());
 		int firstKomma = classDecl.value.toString().indexOf(",");
-		name = classDecl.value.toString().substring("ClassDecl".length() + 1,firstKomma);
-		
+		name = classDecl.value.toString().substring("ClassDecl".length() + 1, firstKomma);
+
 		parameter = new LinkedList<String>();
-		
-		String[] vars = classDecl.value.toString().substring(firstKomma,classDecl.value.toString().indexOf("Opt()")).replaceAll(",,",",").replaceAll(",,",",").split(",");
-		
-		for(String var : vars)
-			if(var.contains(" "))
+
+		String[] vars = classDecl.value.toString().substring(firstKomma, classDecl.value.toString().indexOf("Opt()"))
+				.replaceAll(",,", ",").replaceAll(",,", ",").split(",");
+
+		for (String var : vars)
+			if (var.contains(" "))
 				parameter.add(var);
-		
+
 		java.util.List<ASTNode<ASTNode>> list = new LinkedList<ASTNode<ASTNode>>();
 		NodeUtil.recursiveFind_MethodImpl(classDecl, list);
-		
+
 		methods = new LinkedList<Method>();
-		
+
 		for (ASTNode<ASTNode> methodImpl : list) {
 			methods.add(new Method((MethodImpl) methodImpl));
 		}
 		System.out.println(name);
 		System.out.println(parameter);
+	}
+
+	public java.util.List<Method> getMethods() {
+		return methods;
+	}
+
+	public void setMethods(java.util.List<Method> methods) {
+		this.methods = methods;
+	}
+
+	public java.util.List<String> getParameter() {
+		return parameter;
+	}
+
+	public void setParameter(java.util.List<String> parameter) {
+		this.parameter = parameter;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 }
