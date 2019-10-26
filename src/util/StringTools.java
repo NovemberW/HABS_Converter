@@ -1,5 +1,11 @@
 package util;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
+import abs.backend.prettyprint.DefaultABSFormatter;
+import abs.frontend.ast.ASTNode;
+
 public class StringTools {
 
 	public static boolean containsCaseSensitive(String[] array, String element) {
@@ -8,37 +14,51 @@ public class StringTools {
 				return true;
 		return false;
 	}
-	
+
 	public static boolean containsNotCaseSensitive(String[] array, String element) {
 		for (String e : array)
 			if (e.equalsIgnoreCase(element))
 				return true;
 		return false;
 	}
-	
+
 	public static int find(String[] list, String target) {
-		for(int i = 0;i < list.length;i++)
-			if(list[i].equalsIgnoreCase(target))
+		for (int i = 0; i < list.length; i++)
+			if (list[i].equalsIgnoreCase(target))
 				return i;
 		return -1;
 	}
+
 	public static int getClosingBracket(String full, int openingBracket) {
 		int open = 0;
-		for(int index = openingBracket;full.length() != index;index++) {
-			if(full.charAt(index) == '(')
+		for (int index = openingBracket; full.length() != index; index++) {
+			if (full.charAt(index) == '(')
 				open++;
-			else if(full.charAt(index) == ')')
+			else if (full.charAt(index) == ')')
 				open--;
-			if(open== 0)
+			if (open == 0)
 				return index;
 		}
-		
+
 		return -1;
 	}
+
 	public static String removeSemicolon(String in) {
-		if(in == null)
+		if (in == null)
 			return null;
-		
-		return in.replaceAll(";","");
+
+		return in.replaceAll(";", "");
+	}
+
+	public static String getWithPrettyPrint(ASTNode<ASTNode> statement) {
+
+		StringWriter stringWriter = new StringWriter();
+		try (PrintWriter printWriter = new PrintWriter(stringWriter)) {
+			if (statement != null)
+				statement.doPrettyPrint(printWriter, new DefaultABSFormatter(printWriter));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return stringWriter.toString();
 	}
 }

@@ -3,7 +3,9 @@ package info;
 import java.util.Iterator;
 import java.util.LinkedList;
 import abs.frontend.ast.ASTNode;
+import abs.frontend.ast.ExpressionStmt;
 import abs.frontend.ast.MethodImpl;
+import util.StringTools;
 
 public class Method {
 
@@ -34,8 +36,31 @@ public class Method {
 		LineStateFactory.connectStates(states);
 
 		expandStates();
+		
+		collectStates();
 
-		states.get(0).traversePrint(System.out);
+//		states.get(0).traversePrint(System.out);
+		
+		renameToIDs();
+		
+		System.out.println("-");
+		for(LineState state : states)
+			System.out.println(state);
+		
+	}
+
+	private void collectStates() {
+		for(int i = 0;i < states.size();i++) {
+			for(Transition trans: states.get(i).getNext())
+				if(!states.contains(trans.getTarget()))
+					states.add(trans.getTarget());
+		}
+	}
+
+	private void renameToIDs() {
+		int i = 0;
+		for(LineState state : states)
+			state.setName("s_" + i++);
 	}
 
 	private void expandStates() {

@@ -5,11 +5,11 @@ import java.util.LinkedList;
 
 import abs.frontend.ast.ASTNode;
 
-public class IfLineState extends LineState {
+public class IfLineState extends LineState implements XMLPrinter{
 
 	public IfLineState(ASTNode<ASTNode> line, String name) {
 		super(line, name);
-//		System.out.println("IfLineState");
+		text = "if";
 	}
 
 	@Override
@@ -19,46 +19,41 @@ public class IfLineState extends LineState {
 		Iterator<ASTNode> iterator = this.statement.astChildIterator();
 		iterator.next();// skipping the first element as it is empty
 		ASTNode<ASTNode> booleanEquation = iterator.next();
-		ASTNode<ASTNode> thenBlock = iterator.next().getChild(1);
-		ASTNode<ASTNode> elseBlock = iterator.next();
+		ASTNode<ASTNode> thenBlock = iterator.next().getChild(1);//Skip first entry as it is empty
+		ASTNode<ASTNode> elseBlock = iterator.next().getChild(0);//explicitly 0 --- somehow needed
 
+		java.util.List<LineState> thenStates = expandBlock(thenBlock);
 
-		java.util.List<LineState> thenStates = new LinkedList<LineState>();
+		java.util.List<LineState> elseStates = expandBlock(elseBlock);
 
-		iterator = thenBlock.astChildIterator();
+		LineState out = this.getNext().get(0).getTarget();
 
-		while (iterator.hasNext()) {
-			ASTNode<ASTNode> element = iterator.next();
-			thenStates.add(LineStateFactory.getLineState(element, element.value.toString()));
-		}
-
-		LineStateFactory.connectStates(thenStates);
-
-		java.util.List<LineState> elseStates = new LinkedList<LineState>();
-
-		iterator = elseBlock.astChildIterator();
-
-		while (iterator.hasNext()) {
-			ASTNode<ASTNode> element = iterator.next();
-			elseStates.add(LineStateFactory.getLineState(element, element.value.toString()));
-		}
-
-		LineStateFactory.connectStates(elseStates);
-		
-		LineState out = this.getNext().get(0);
-		
 		this.removeNext(out);
-		this.addNext(thenStates.get(0));
+		this.addNext(new Transition(booleanEquation, thenStates.get(0)));
 		this.addNext(elseStates.get(0));
 		thenStates.get(thenStates.size() - 1).addNext(out);
 		elseStates.get(elseStates.size() - 1).addNext(out);
-		/*
-		 * StringWriter stringWriter = new StringWriter(); try (PrintWriter printWriter
-		 * = new PrintWriter(stringWriter)) { if(statement != null)
-		 * statement.doPrettyPrint(printWriter, new DefaultABSFormatter(printWriter));
-		 * }catch (Exception e) { e.printStackTrace(); }
-		 * System.out.println(stringWriter.toString()); System.out.println("---");
-		 */
+	}
+
+	private java.util.List<LineState> expandBlock(ASTNode<ASTNode> block) {
+		Iterator<ASTNode> iterator;
+		java.util.List<LineState> statesResult = new LinkedList<LineState>();
+
+		iterator = block.astChildIterator();
+
+		while (iterator.hasNext()) {
+			ASTNode<ASTNode> element = iterator.next();
+			statesResult.add(LineStateFactory.getLineState(element, element.value.toString()));
+		}
+
+		LineStateFactory.connectStates(statesResult);
+		return statesResult;
+	}
+	
+	@Override
+	public java.util.List<String> getAsXML() {
+		// TODO Auto-generated method stub
+		return super.getAsXML();
 	}
 
 }
