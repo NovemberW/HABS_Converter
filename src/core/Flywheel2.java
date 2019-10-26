@@ -54,7 +54,7 @@ public class Flywheel2 {
 				fileName = ((FileFlag) fI).getFileName();
 		
 		try {
-			contentModel.extractInfo(fileName);
+			contentModel.extract(fileName);
 			System.out.println(contentModel.toString());
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -80,7 +80,7 @@ public class Flywheel2 {
 			return null;
 		if(node.value.toString().startsWith(startText))
 			return node;
-//		System.out.println(node.value);
+		System.out.println(node.value);
 		Iterator<ASTNode> it = node.astChildIterator();
 
 		ASTNode<ASTNode> akku = null;

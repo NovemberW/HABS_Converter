@@ -15,7 +15,6 @@ public class ClassContent {
 	String name;
 
 	public ClassContent(ClassDecl classDecl) {
-		System.out.println(classDecl.toString());
 		int firstKomma = classDecl.value.toString().indexOf(",");
 		name = classDecl.value.toString().substring("ClassDecl".length() + 1, firstKomma);
 
@@ -36,8 +35,8 @@ public class ClassContent {
 		for (ASTNode<ASTNode> methodImpl : list) {
 			methods.add(new Method((MethodImpl) methodImpl));
 		}
-		System.out.println(name);
-		System.out.println(parameter);
+//		System.out.println(name);
+//		System.out.println(parameter);
 	}
 
 	public java.util.List<Method> getMethods() {
@@ -62,5 +61,12 @@ public class ClassContent {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	@Override
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		
+		return sb.toString();
 	}
 }

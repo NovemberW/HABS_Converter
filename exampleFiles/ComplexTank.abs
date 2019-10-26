@@ -5,7 +5,7 @@ interface Tank{
 class Tank(Real inVal) implements Tank{
 	physical {
 		Real level = inVal : level' = drain;
-		REal drain = -1/2 _ drain' = 0;
+		Real drain = -1/2 : drain' = 0;
 	}
 	
 	Unit run(){

@@ -88,7 +88,22 @@ public class NodeUtil {
 
 		ASTNode<ASTNode> akku = null;
 		while (it.hasNext() && akku == null) {
-			akku = recursiveFind_PhysicalImpl(it.next());
+			akku = recursiveFind_DifferentialExp(it.next());
+		}
+		return akku;
+	}
+	
+	public static ASTNode<ASTNode> recursiveTraverserFind(@SuppressWarnings("rawtypes") ASTNode node, String startText) {
+		if (node == null)
+			return null;
+		if(node.value.toString().startsWith(startText))
+			return node;
+//		System.out.println(node.value);
+		Iterator<ASTNode> it = node.astChildIterator();
+
+		ASTNode<ASTNode> akku = null;
+		while (it.hasNext() && akku == null) {
+			akku = recursiveTraverserFind(it.next(),startText);
 		}
 		return akku;
 	}
