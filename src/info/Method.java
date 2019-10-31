@@ -43,9 +43,14 @@ public class Method {
 		
 		renameToIDs();
 		
-		System.out.println("-");
-		for(LineState state : states)
-			System.out.println(state);
+		
+		for(LineState state : states) {
+			java.util.List<String> xmlList = state.getAsXML();
+			for(String s : xmlList) {
+				System.out.println(s);
+				System.out.println("\n");
+			}
+		}
 		
 	}
 
@@ -59,8 +64,10 @@ public class Method {
 
 	private void renameToIDs() {
 		int i = 0;
-		for(LineState state : states)
-			state.setName("s_" + i++);
+		for(LineState state : states) {
+			state.setName(String.valueOf(i));
+			i++;
+		}
 	}
 
 	private void expandStates() {
