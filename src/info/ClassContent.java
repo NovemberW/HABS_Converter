@@ -35,8 +35,6 @@ public class ClassContent {
 		for (ASTNode<ASTNode> methodImpl : list) {
 			methods.add(new Method((MethodImpl) methodImpl));
 		}
-//		System.out.println(name);
-//		System.out.println(parameter);
 	}
 
 	public java.util.List<Method> getMethods() {
@@ -66,6 +64,9 @@ public class ClassContent {
 	@Override
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
+		
+		for(Method m : methods)
+			sb.append(m.toString());
 		
 		return sb.toString();
 	}

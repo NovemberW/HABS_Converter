@@ -38,19 +38,11 @@ public class Method {
 		expandStates();
 		
 		collectStates();
-
-//		states.get(0).traversePrint(System.out);
 		
 		renameToIDs();
 		
 		
-		for(LineState state : states) {
-			java.util.List<String> xmlList = state.getAsXML();
-			for(String s : xmlList) {
-				System.out.println(s);
-				System.out.println("\n");
-			}
-		}
+		
 		
 	}
 
@@ -85,5 +77,18 @@ public class Method {
 				return state;
 
 		return null;
+	}
+	@Override
+	public String toString() {
+		StringBuffer sb = new StringBuffer();
+		
+		for(LineState state : states) {
+			java.util.List<String> xmlList = state.getAsXML();
+			for(String s : xmlList) {
+				sb.append(s);
+				sb.append("\n");
+			}
+		}
+		return sb.toString();
 	}
 }

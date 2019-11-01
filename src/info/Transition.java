@@ -8,24 +8,27 @@ public class Transition{
 	
 	private LineState target;
 	
-	private ASTNode<ASTNode> guard;
+	private String guard;
 	
 	
-	public Transition(ASTNode<ASTNode> guard, LineState target) {
+	public Transition(String guard, LineState target) {
 		this.target = target;
 		this.guard = guard;
+		
+		if(this.guard == null)
+			this.guard = "true";
 	}
 	
 	public Transition(LineState target) {
 		this.target = target;
-		this.guard = null;
+		this.guard = "true";
 	}
 
-	public ASTNode<ASTNode> getGuard() {
+	public String getGuard() {
 		return guard;
 	}
 
-	public void setGuard(ASTNode<ASTNode> guard) {
+	public void setGuard(String guard) {
 		this.guard = guard;
 	}
 
@@ -38,9 +41,6 @@ public class Transition{
 	}
 	
 	public String getGuardValue() {
-		if(guard == null)
-			return "true";
-		else
-			return StringTools.getWithPrettyPrint(guard);
+		return guard;
 	}
 }

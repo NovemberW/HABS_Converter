@@ -83,7 +83,8 @@ public class ContentModel {
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 
-		//TODO add new Substructure when implemented
+		for(ClassContent c : classes)
+			sb.append(c.toString());
 
 		return sb.toString();
 	}

@@ -9,6 +9,8 @@ import util.StringTools;
 public class LineState implements XMLPrinter {
 
 	String name;
+	
+	String id;
 
 	ASTNode<ASTNode> statement;
 
@@ -68,6 +70,11 @@ public class LineState implements XMLPrinter {
 
 	public void setName(String name) {
 		this.name = "_" + name;
+		this.id = name;
+	}
+
+	public String getId() {
+		return id;
 	}
 
 	public void extend() {
@@ -110,7 +117,7 @@ public class LineState implements XMLPrinter {
 		StringBuffer sb = new StringBuffer();
 		
 		sb.append("<location id=\"");
-		sb.append(this.name.replace("_",""));
+		sb.append(this.id);
 		sb.append("\" name=\"");
 		sb.append(this.name);
 		sb.append("\" x=\"361.0\" y=\"314.0\" width=\"218.0\" height=\"128.0\">\n");
@@ -124,11 +131,13 @@ public class LineState implements XMLPrinter {
 			sb = new StringBuffer();
 			sb.append("<transition source=\"");
 			// "2" target="3"
-			sb.append(this.getName().replace("_",""));
+			sb.append(this.getId());
 			sb.append("\" target=\"");
-			sb.append(trans.getTarget().getName().replace("_",""));
+			sb.append(trans.getTarget().getId());
 			sb.append("\">\n");
-			sb.append("<guard>level &lt;= 3 </guard>\n");
+			sb.append("<guard>");
+			sb.append(StringTools.parseToXML(trans.getGuardValue()));
+			sb.append("</guard>\n");
 			sb.append("<labelposition x=\"-31.0\" y=\"3.0\" width=\"76.0\" height=\"50.0\" />\n");
 			sb.append("<middlepoint x=\"579.0\" y=\"381.5\" />\n");
 			sb.append("</transition>\n");

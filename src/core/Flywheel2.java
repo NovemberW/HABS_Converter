@@ -17,6 +17,7 @@ import abs.frontend.ast.List;
 import abs.frontend.ast.Model;
 import flags.FileFlag;
 import flags.FilePrintFlag;
+import flags.FileStoreFlag;
 import flags.FlagInterface;
 import flags.HelpFlag;
 import info.ContentModel;
@@ -35,6 +36,7 @@ public class Flywheel2 {
 		availableFlags.add(new HelpFlag(availableFlags));
 		availableFlags.add(new FileFlag(availableFlags));
 		availableFlags.add(new FilePrintFlag(availableFlags));
+		availableFlags.add(new FileStoreFlag(availableFlags));
 			
 	}
 
@@ -44,7 +46,7 @@ public class Flywheel2 {
 
 		readArguments(args);
 
-		evaluateArguments();
+		executeArguments(true); //execute all flag that should run before the conversion is performed
 
 		ContentModel contentModel = new ContentModel(availableFlags);
 		String fileName = null;
@@ -55,17 +57,22 @@ public class Flywheel2 {
 		
 		try {
 			contentModel.extract(fileName);
-			System.out.println(contentModel.toString());
+			for(FlagInterface fI : availableFlags)
+				if(fI instanceof FileStoreFlag)
+					((FileStoreFlag) fI).setFileContent(contentModel.toString());
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.exit(-1);
 		}
 		
+		executeArguments(false);
 	}
 
-	private void evaluateArguments() {
+	private void executeArguments(boolean before) {
 		for(FlagInterface flag: availableFlags) {
-			flag.performe();
+			if(flag.isBefore() == before) {
+				flag.performe();
+			}
 		}
 
 	}

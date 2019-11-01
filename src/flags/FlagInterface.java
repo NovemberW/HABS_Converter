@@ -12,6 +12,16 @@ public abstract class FlagInterface {
 	
 	public boolean isActive = false;
 	
+	protected boolean before = true;
+	
+	public boolean isBefore() {
+		return before;
+	}
+
+	public void setBefore(boolean before) {
+		this.before = before;
+	}
+
 	protected java.util.List<FlagInterface> flagList;
 	
 	public FlagInterface(java.util.List<FlagInterface> flagList) {
@@ -24,11 +34,12 @@ public abstract class FlagInterface {
 	}
 	public void isActive() {
 		boolean a = false;
-		for (String e : argList)
+		for (String e : argList) {
 			if (e.toLowerCase().equals("-" + name)) {
 				a = true;
 				break;
 			}
+		}
 		isActive = a;
 	}
 	/**

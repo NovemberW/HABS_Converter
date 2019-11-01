@@ -4,6 +4,9 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import abs.frontend.ast.ASTNode;
+import abs.frontend.ast.NegExp;
+import abs.frontend.ast.PureExp;
+import util.StringTools;
 
 public class IfLineState extends LineState implements XMLPrinter{
 
@@ -27,10 +30,15 @@ public class IfLineState extends LineState implements XMLPrinter{
 		java.util.List<LineState> elseStates = expandBlock(elseBlock);
 
 		LineState out = this.getNext().get(0).getTarget();
-
+		
+		
+		String positive = StringTools.getWithPrettyPrint(booleanEquation);
+		
+		String negative = StringTools.invertEquation(positive);
+		
 		this.removeNext(out);
-		this.addNext(new Transition(booleanEquation, thenStates.get(0)));
-		this.addNext(elseStates.get(0));
+		this.addNext(new Transition(positive, thenStates.get(0)));
+		this.addNext(new Transition(negative,elseStates.get(0)));
 		thenStates.get(thenStates.size() - 1).addNext(out);
 		elseStates.get(elseStates.size() - 1).addNext(out);
 	}

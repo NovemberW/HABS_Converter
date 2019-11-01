@@ -61,4 +61,36 @@ public class StringTools {
 		}
 		return stringWriter.toString();
 	}
+
+	public static String parseToXML(String in) {
+		String workingCopy = new String(in);
+		
+		String[][] replacementVector = { 
+				{"this.", ""},
+				{"<=", "&lt;"},
+				{">=", "&gt;"},
+				{"&&", "&amp"},
+				{"<", "&l;"},
+				{">", "&g;"}
+				
+		};
+		for(String[] rep : replacementVector)
+			workingCopy = workingCopy.replace(rep[0],rep[1]);
+
+		return workingCopy;
+	}
+
+	public static String invertEquation(String equation) {
+		String result = new String(equation);
+		String[][] replacementVector = { {"<=","_le_",">"}, {">=","_ge_","<"}, {"<","_l_",">="}, {">","_g_","<="},{"==","_e_","!="}};
+		
+		for(String[] rep: replacementVector)
+			result = result.replaceAll(rep[0],rep[1]);
+		
+		for(String[] rep: replacementVector)
+			result = result.replaceAll(rep[1],rep[2]);
+		
+		
+		return result;
+	}
 }
