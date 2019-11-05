@@ -6,9 +6,9 @@ import abs.frontend.ast.ASTNode;
 import core.MainDefs;
 import util.StringTools;
 
-public class AwaitLineState extends LineState {
+public class AwaitDurationLineState extends LineState {
 
-	public AwaitLineState(ASTNode<ASTNode> line, String name, String flow) {
+	public AwaitDurationLineState(ASTNode<ASTNode> line, String name, String flow) {
 		super(line, name, "true", flow);
 		// As this is the state containing the diff. guard its invariant is true
 
@@ -37,14 +37,13 @@ public class AwaitLineState extends LineState {
 
 		String transitionAssignment = getAssignmentString();
 		
-		String guard = StringTools.parseToXML(StringTools.getWithPrettyPrint(statement))
-				.replaceAll("await|diff","").trim();
+		
+		String guard = MainDefs.globalTimeName 
+				+ " == " 
+				+ StringTools.getWithPrettyPrint(statement.getChild(1).getChild(0));
+		//Note: As statet during meetings both values are the same 
+		//- using only the first one
 	
-		int semi = guard.lastIndexOf(";");
-		
-		if(semi != -1)//getting rid of the last semicolon
-			guard = guard.substring(0, semi) + guard.substring(semi  +1);
-		
 		for (Transition trans : nexts) {
 			sb = new StringBuffer();
 			sb.append("<transition source=\"");

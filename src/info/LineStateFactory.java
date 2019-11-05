@@ -4,23 +4,32 @@ import org.eclipse.jdt.internal.compiler.ast.IfStatement;
 
 import abs.frontend.ast.ASTNode;
 import abs.frontend.ast.AwaitStmt;
+import abs.frontend.ast.DurationGuard;
 import abs.frontend.ast.IfStmt;
+import exception.UnknownASTNodeException;
 
 public class LineStateFactory {
-	
-	public static LineState getLineState(ASTNode<ASTNode> node, String name,String invariant, String flow) {
-		if(node instanceof AwaitStmt)
-			return new AwaitLineState(node, name,flow);
-		
-		if(node instanceof IfStmt)
-			return new IfLineState(node, name,invariant,flow);
-		
-		return new LineState(node,name,invariant,flow);
+
+	public static LineState getLineState(ASTNode<ASTNode> node, String name, String invariant, String flow) {
+		try {
+			if (node instanceof AwaitStmt) {
+				if (node.getChild(1) instanceof DurationGuard)
+					return new AwaitDurationLineState(node, name, flow);
+
+				return new AwaitDiffLineState(node, name, flow);
+			}
+			if (node instanceof IfStmt)
+				return new IfLineState(node, name, invariant, flow);
+		} catch (Exception e) {
+			throw new UnknownASTNodeException(e);
+		}
+
+		return new LineState(node, name, invariant, flow);
 	}
 
 	public static void connectStates(java.util.List<LineState> states) {
-		for(int i = 0;i < states.size() - 1;i++) {
-			states.get(i).addNext(states.get(i  + 1));
+		for (int i = 0; i < states.size() - 1; i++) {
+			states.get(i).addNext(states.get(i + 1));
 		}
 	}
 }
