@@ -4,6 +4,7 @@ import java.io.PrintStream;
 import java.util.LinkedList;
 
 import abs.frontend.ast.ASTNode;
+import core.MainDefs;
 import util.StringTools;
 
 public class LineState implements XMLPrinter {
@@ -11,12 +12,16 @@ public class LineState implements XMLPrinter {
 	String name;
 	
 	String id;
+	
+	String flow;
 
 	ASTNode<ASTNode> statement;
 
 	java.util.List<Transition> nexts;
 
 	String text;
+	
+	private String invariant;
 
 	public String getText() {
 		return text;
@@ -44,7 +49,7 @@ public class LineState implements XMLPrinter {
 				nexts.remove(trans);
 	}
 
-	public LineState(ASTNode<ASTNode> line, String name) {
+	public LineState(ASTNode<ASTNode> line, String name, String invariant,String flow) {
 		this.statement = line;
 		if (line != null)
 			this.text = StringTools.getWithPrettyPrint(line);
@@ -52,6 +57,9 @@ public class LineState implements XMLPrinter {
 			this.text = name;
 
 		this.setName(name);
+		this.setInvariant(invariant);
+		
+		this.flow = flow;
 
 		nexts = new LinkedList<Transition>();
 	}
@@ -121,11 +129,17 @@ public class LineState implements XMLPrinter {
 		sb.append("\" name=\"");
 		sb.append(this.name);
 		sb.append("\" x=\"361.0\" y=\"314.0\" width=\"218.0\" height=\"128.0\">\n");
-		sb.append("<flow>level' == drain &amp; drain' == 0</flow>\n");
+		sb.append("<invariant>");
+		sb.append(MainDefs.globalTimeInvariant);
+		sb.append("</invariant>\n");
+		sb.append("<flow>");
+		sb.append(this.flow);
+		sb.append("</flow>\n");
 		sb.append("</location>\n");
 		
 		akku.add(sb.toString());
 
+		String transitionAssignment = getAssignmentString();
 		
 		for (Transition trans : nexts) {
 			sb = new StringBuffer();
@@ -137,7 +151,8 @@ public class LineState implements XMLPrinter {
 			sb.append("\">\n");
 			sb.append("<guard>");
 			sb.append(StringTools.parseToXML(trans.getGuardValue()));
-			sb.append("</guard>\n");
+			sb.append(" </guard>\n");
+			sb.append(transitionAssignment);
 			sb.append("<labelposition x=\"-31.0\" y=\"3.0\" width=\"76.0\" height=\"50.0\" />\n");
 			sb.append("<middlepoint x=\"579.0\" y=\"381.5\" />\n");
 			sb.append("</transition>\n");
@@ -145,5 +160,23 @@ public class LineState implements XMLPrinter {
 			akku.add(sb.toString());
 		}
 		return akku;
+	}
+
+	protected String getAssignmentString() {
+		String assignment = StringTools.convertToTransition(StringTools.getWithPrettyPrint(statement));
+		StringBuffer sb = new StringBuffer();
+		
+		sb.append("<assignment>");
+		sb.append(assignment);
+		sb.append(" </assignment>\n");
+		return sb.toString();
+	}
+
+	public String getInvariant() {
+		return invariant;
+	}
+
+	public void setInvariant(String invariant) {
+		this.invariant = invariant;
 	}
 }

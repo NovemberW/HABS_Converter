@@ -67,11 +67,11 @@ public class StringTools {
 		
 		String[][] replacementVector = { 
 				{"this.", ""},
-				{"<=", "&lt;"},
-				{">=", "&gt;"},
+				{"<=", "&lt;="},
+				{">=", "&gt;="},
 				{"&&", "&amp"},
-				{"<", "&l;"},
-				{">", "&g;"}
+				{"<", "&lt;"},
+				{">", "&gt;"}
 				
 		};
 		for(String[] rep : replacementVector)
@@ -92,5 +92,15 @@ public class StringTools {
 		
 		
 		return result;
+	}
+	
+	public static String convertToTransition(String statement) {
+		String assignment = new String(statement);
+		String[][] replacementVector = { {"=",":="},{"this.",""},{";",""}};
+		
+		for(String[] rep: replacementVector)
+			assignment = assignment.replaceAll(rep[0],rep[1]);
+		
+		return assignment;
 	}
 }

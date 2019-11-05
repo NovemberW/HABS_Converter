@@ -4,7 +4,7 @@ module Test;
 class CSingleTank(Real inVal){
 	
 	physical{
-		Real level = inVal : level' = drain;
+		Real level = 5 : level' = drain;
 		Real drain = -1/2 : drain' = 0;
 	}
 	

@@ -8,14 +8,14 @@ import abs.frontend.ast.IfStmt;
 
 public class LineStateFactory {
 	
-	public static LineState getLineState(ASTNode<ASTNode> node, String name) {
+	public static LineState getLineState(ASTNode<ASTNode> node, String name,String invariant, String flow) {
 		if(node instanceof AwaitStmt)
-			return new AwaitLineState(node, name);
+			return new AwaitLineState(node, name,flow);
 		
 		if(node instanceof IfStmt)
-			return new IfLineState(node, name);
+			return new IfLineState(node, name,invariant,flow);
 		
-		return new LineState(node,name);
+		return new LineState(node,name,invariant,flow);
 	}
 
 	public static void connectStates(java.util.List<LineState> states) {

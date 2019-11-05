@@ -63,8 +63,11 @@ public class FileStoreFlag extends FlagInterface {
 		
 		System.out.println("Storing file");
 		
-		}else
+		}else {
 			System.out.println("File already exists");
+			System.out.println("Dumping to stdout:\n");
+			System.out.println(getFileContent());
+		}
 	}
 	
 	public String getFileContent() {

@@ -5,18 +5,23 @@ import java.util.LinkedList;
 import abs.frontend.ast.ASTNode;
 import abs.frontend.ast.ExpressionStmt;
 import abs.frontend.ast.MethodImpl;
+import core.MainDefs;
 import util.StringTools;
 
 public class Method {
 
 	private String name;
+	
+	private String flow;
 
 	private java.util.List<LineState> states;
 
-	public Method(MethodImpl methodImpl) {
+	public Method(MethodImpl methodImpl, String flow) {
 		String full = methodImpl.getChild(0).value.toString();
 		name = full.substring(full.indexOf(" "), full.indexOf("(")).trim();
 
+		this.flow = flow;
+		
 		states = new LinkedList<LineState>();
 
 		Iterator<ASTNode<ASTNode>> blockIterator = methodImpl.getChild(1).getChild(1).astChildIterator();// ==
@@ -24,14 +29,14 @@ public class Method {
 																											// statements
 																											// of method
 
-		states.add(LineStateFactory.getLineState(null, name)); // state to start is method declaration
+		states.add(LineStateFactory.getLineState(null, name,MainDefs.globalTimeInvariant,flow)); // state to start is method declaration
 		int i = 0;
 		while (blockIterator.hasNext()) {// creating one state for each line
 			ASTNode<ASTNode> element = blockIterator.next();
-			states.add(LineStateFactory.getLineState(element, String.valueOf(i++)));
+			states.add(LineStateFactory.getLineState(element, String.valueOf(i++),MainDefs.globalTimeInvariant, flow));
 		}
 
-		states.add(LineStateFactory.getLineState(null, "end")); // final state for method is implicit "}" state
+		states.add(LineStateFactory.getLineState(null, "end",MainDefs.globalTimeInvariant,flow)); // final state for method is implicit "}" state
 
 		LineStateFactory.connectStates(states);
 

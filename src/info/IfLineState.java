@@ -6,12 +6,13 @@ import java.util.LinkedList;
 import abs.frontend.ast.ASTNode;
 import abs.frontend.ast.NegExp;
 import abs.frontend.ast.PureExp;
+import core.MainDefs;
 import util.StringTools;
 
 public class IfLineState extends LineState implements XMLPrinter{
 
-	public IfLineState(ASTNode<ASTNode> line, String name) {
-		super(line, name);
+	public IfLineState(ASTNode<ASTNode> line, String name,String invariant,String flow) {
+		super(line, name,invariant,flow);
 		text = "if";
 	}
 
@@ -51,7 +52,7 @@ public class IfLineState extends LineState implements XMLPrinter{
 
 		while (iterator.hasNext()) {
 			ASTNode<ASTNode> element = iterator.next();
-			statesResult.add(LineStateFactory.getLineState(element, element.value.toString()));
+			statesResult.add(LineStateFactory.getLineState(element, element.value.toString(),MainDefs.globalTimeInvariant,flow));
 		}
 
 		LineStateFactory.connectStates(statesResult);
@@ -60,8 +61,11 @@ public class IfLineState extends LineState implements XMLPrinter{
 	
 	@Override
 	public java.util.List<String> getAsXML() {
-		// TODO Auto-generated method stub
 		return super.getAsXML();
+	}
+	@Override
+	protected String getAssignmentString() {
+		return "";
 	}
 
 }

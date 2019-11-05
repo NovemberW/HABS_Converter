@@ -1,5 +1,7 @@
 package info;
 
+import java.util.Iterator;
+
 import abs.frontend.ast.ASTNode;
 import util.NodeUtil;
 import util.StringTools;
@@ -7,38 +9,53 @@ import util.StringTools;
 public class ContinousVariable {
 	private String name;
 
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getInitialValue() {
+		return initialValue;
+	}
+
+	public void setInitialValue(String initialValue) {
+		this.initialValue = initialValue;
+	}
+
+	public String getFormula() {
+		return formula;
+	}
+
+	public void setFormula(String formula) {
+		this.formula = formula;
+	}
+
 	private String initialValue;
 
 	private String formula;
 
-	String filecontent;
+	private ASTNode<ASTNode> physicalBlock;
 
-	public ContinousVariable(String var, String filecontent) {
-		this.filecontent = filecontent;
-		name = var;
+	public ContinousVariable(ASTNode<ASTNode> physicalBlock) {
+		this.physicalBlock = physicalBlock;
 		extractContinousVariable();
 
 	}
 
 	private void extractContinousVariable() {
-		
+		ASTNode<ASTNode> var = physicalBlock.getChild(1);
+		String full = physicalBlock.value.toString();
+		name = full.substring(full.indexOf("Real ") + 5, full.indexOf("=")).trim();
 
-		String[] lines = filecontent.split(System.lineSeparator());
+		ASTNode<ASTNode> help = var.getChild(0);
 
-		for (int i = 0; i < lines.length; i++)
-			lines[i] = lines[i].replaceAll(" ", " ").trim();
+		initialValue = StringTools.getWithPrettyPrint(help.getChild(0));
+		//System.out.println(help.getChild(1).getChild(0) + "'");
+		formula = help.getChild(1).getChild(0) + "' == " + StringTools.getWithPrettyPrint(help.getChild(2));
 
-		for (int i = 0; i < lines.length; i++)
-			if (lines[i].startsWith("Rat " + name)) {
-				String[] exp = lines[i].substring(("Rat " + name).length() + 2).trim().split(":");
-				initialValue = exp[0];
-				if(exp.length == 2)
-					formula = StringTools.removeSemicolon(exp[1]);
-				else
-					formula = "";
-				break;
-			}
-//			System.out.println(lines[i]);
 	}
 
 	@Override

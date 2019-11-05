@@ -1,0 +1,115 @@
+<location id="0" name="_0" x="361.0" y="314.0" width="218.0" height="128.0">
+<invariant>global_time == 0</invariant>
+<flow>level' == drain &amp; drain' == 0</flow>
+</location>
+
+<transition source="0" target="1">
+<guard>true </guard>
+<labelposition x="-31.0" y="3.0" width="76.0" height="50.0" />
+<middlepoint x="579.0" y="381.5" />
+</transition>
+
+<location id="1" name="_1" x="361.0" y="314.0" width="218.0" height="128.0">
+<invariant>global_time == 0</invariant>
+<flow>level' == drain &amp; drain' == 0</flow>
+</location>
+
+<transition source="1" target="2">
+<guard>true </guard>
+<labelposition x="-31.0" y="3.0" width="76.0" height="50.0" />
+<middlepoint x="579.0" y="381.5" />
+</transition>
+
+<location id="2" name="_2" x="361.0" y="314.0" width="218.0" height="128.0">
+<invariant>global_time == 0</invariant>
+<flow>level' == drain &amp; drain' == 0</flow>
+</location>
+
+<location id="0" name="_0" x="361.0" y="314.0" width="218.0" height="128.0">
+<invariant>global_time == 0</invariant>
+<flow>level' == drain &amp; drain' == 0</flow>
+</location>
+
+<transition source="0" target="1">
+<guard>true </guard>
+<labelposition x="-31.0" y="3.0" width="76.0" height="50.0" />
+<middlepoint x="579.0" y="381.5" />
+</transition>
+
+<location id="1" name="_1" x="361.0" y="314.0" width="218.0" height="128.0">
+<invariant>global_time == 0</invariant>
+<flow></flow>
+</location>
+
+<transition source="1" target="2">
+<guard>true </guard>
+<labelposition x="-31.0" y="3.0" width="76.0" height="50.0" />
+<middlepoint x="579.0" y="381.5" />
+</transition>
+
+<location id="2" name="_2" x="361.0" y="314.0" width="218.0" height="128.0">
+<invariant>global_time == 0</invariant>
+<flow>level' == drain &amp; drain' == 0</flow>
+</location>
+
+<transition source="2" target="5">
+<guard>( level &lt;= 3 ) </guard>
+<labelposition x="-31.0" y="3.0" width="76.0" height="50.0" />
+<middlepoint x="579.0" y="381.5" />
+</transition>
+
+<transition source="2" target="6">
+<guard>( level &gt; 3 ) </guard>
+<labelposition x="-31.0" y="3.0" width="76.0" height="50.0" />
+<middlepoint x="579.0" y="381.5" />
+</transition>
+
+<location id="3" name="_3" x="361.0" y="314.0" width="218.0" height="128.0">
+<invariant>global_time == 0</invariant>
+<flow>level' == drain &amp; drain' == 0</flow>
+</location>
+
+<transition source="3" target="4">
+<guard>true </guard>
+<labelposition x="-31.0" y="3.0" width="76.0" height="50.0" />
+<middlepoint x="579.0" y="381.5" />
+</transition>
+
+<location id="4" name="_4" x="361.0" y="314.0" width="218.0" height="128.0">
+<invariant>global_time == 0</invariant>
+<flow>level' == drain &amp; drain' == 0</flow>
+</location>
+
+<location id="5" name="_5" x="361.0" y="314.0" width="218.0" height="128.0">
+<invariant>global_time == 0</invariant>
+<flow>level' == drain &amp; drain' == 0</flow>
+</location>
+
+<transition source="5" target="3">
+<guard>true </guard>
+<labelposition x="-31.0" y="3.0" width="76.0" height="50.0" />
+<middlepoint x="579.0" y="381.5" />
+</transition>
+
+<location id="6" name="_6" x="361.0" y="314.0" width="218.0" height="128.0">
+<invariant>global_time == 0</invariant>
+<flow>level' == drain &amp; drain' == 0</flow>
+</location>
+
+<transition source="6" target="7">
+<guard>true </guard>
+<labelposition x="-31.0" y="3.0" width="76.0" height="50.0" />
+<middlepoint x="579.0" y="381.5" />
+</transition>
+
+<location id="7" name="_7" x="361.0" y="314.0" width="218.0" height="128.0">
+<invariant>global_time == 0</invariant>
+<flow>level' == drain &amp; drain' == 0</flow>
+</location>
+
+<transition source="7" target="3">
+<guard>true </guard>
+<labelposition x="-31.0" y="3.0" width="76.0" height="50.0" />
+<middlepoint x="579.0" y="381.5" />
+</transition>
+

@@ -1,6 +1,7 @@
 package util;
 
 import java.util.Iterator;
+import java.util.LinkedList;
 
 import abs.frontend.ast.ASTNode;
 import abs.frontend.ast.AwaitStmt;
@@ -42,7 +43,36 @@ public class NodeUtil {
 			recursiveFind_MethodImpl(it.next(),akku);
 		}
 	}
+	
+	public static java.util.List<ASTNode<ASTNode>> getAllPhysicalImpl(ASTNode<ASTNode> classDecl){
+		java.util.List<ASTNode<ASTNode>> akku = new LinkedList<ASTNode<ASTNode>>();
+		
+		getAllPhysicalImplHelper(classDecl, akku);
 
+		return akku;
+		
+	}
+
+	private static java.util.List<ASTNode<ASTNode>> getAllPhysicalImplHelper(ASTNode<ASTNode> node,java.util.List<ASTNode<ASTNode>> akku){
+
+		if (node == null)
+			return akku;
+		if (node instanceof PhysicalImpl) {
+			akku.add(node);
+			return akku;
+		}
+
+		Iterator<ASTNode> it = node.astChildIterator();
+
+		ASTNode<ASTNode> ret = null;
+		while (it.hasNext() && ret == null) {
+			getAllPhysicalImplHelper(it.next(),akku);
+		}
+		
+		
+		return akku;
+		
+	}
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static ASTNode<ASTNode> recursiveFind_PhysicalImpl(ASTNode<ASTNode> node) {
 		if (node == null)
