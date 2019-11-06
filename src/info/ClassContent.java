@@ -46,8 +46,12 @@ public class ClassContent {
 
 		methods = new LinkedList<Method>();
 
+		int base = 0;
 		for (ASTNode<ASTNode> methodImpl : list) {
-			methods.add(new Method((MethodImpl) methodImpl,flow));
+			Method current = new Method((MethodImpl) methodImpl,flow);
+			current.renameToIDs(base);
+			methods.add(current);
+			base += 100;
 		}
 	}
 

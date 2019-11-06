@@ -44,9 +44,7 @@ public class Method {
 		
 		collectStates();
 		
-		renameToIDs();
-		
-		
+		renameToIDs(0);
 		
 		
 	}
@@ -59,8 +57,8 @@ public class Method {
 		}
 	}
 
-	private void renameToIDs() {
-		int i = 0;
+	public void renameToIDs(int base) {
+		int i = base;
 		for(LineState state : states) {
 			state.setName(String.valueOf(i));
 			i++;

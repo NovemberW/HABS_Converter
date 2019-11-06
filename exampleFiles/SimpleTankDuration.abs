@@ -1,0 +1,23 @@
+module Test;
+
+
+class CSingleTank(Real inVal){
+	
+	physical{
+		Real level = 5 : level' = drain;
+		Real drain = -1/2 : drain' = 0;
+	}
+	
+	Unit run() {
+		this!ctrl();
+	}
+
+	Unit ctrl(){
+		await duration(42,42);
+		if(level <= 3)
+			drain = 1/2;
+		else 
+			drain = -1/2;
+		this!ctrl();
+	}
+}
