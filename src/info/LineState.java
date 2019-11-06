@@ -9,19 +9,19 @@ import util.StringTools;
 
 public class LineState implements XMLPrinter {
 
-	String name;
+	protected String name;
 	
-	String id;
+	protected String id;
 	
-	String flow;
+	protected String flow;
 
-	ASTNode<ASTNode> statement;
+	protected ASTNode<ASTNode> statement;
 
-	java.util.List<Transition> nexts;
+	protected java.util.List<Transition> nexts;
 
-	String text;
+	protected String text;
 	
-	private String invariant;
+	protected String invariant;
 
 	public String getText() {
 		return text;
@@ -178,5 +178,25 @@ public class LineState implements XMLPrinter {
 
 	public void setInvariant(String invariant) {
 		this.invariant = invariant;
+	}
+	
+	public String getFlow() {
+		return flow;
+	}
+
+	public void setFlow(String flow) {
+		this.flow = flow;
+	}
+
+	public java.util.List<Transition> getNexts() {
+		return nexts;
+	}
+
+	public void setNexts(java.util.List<Transition> nexts) {
+		this.nexts = nexts;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 }

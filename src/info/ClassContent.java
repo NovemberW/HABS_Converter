@@ -1,10 +1,12 @@
 package info;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
 import abs.frontend.ast.ASTNode;
 import abs.frontend.ast.ClassDecl;
+import abs.frontend.ast.ExpressionStmt;
 import abs.frontend.ast.MethodImpl;
 import util.NodeUtil;
 
@@ -33,14 +35,14 @@ public class ClassContent {
 
 		StringBuffer sb = new StringBuffer();
 
-		for (int i = 0;i < this.physicalBlock.size() - 1;i++){
+		for (int i = 0; i < this.physicalBlock.size() - 1; i++) {
 			sb.append(this.physicalBlock.get(i).getFormula());
 			sb.append(" &amp; ");
 		}
 		sb.append(this.physicalBlock.get(this.physicalBlock.size() - 1).getFormula());
 
-		String flow = sb.toString().replaceAll("this.","");
-		
+		String flow = sb.toString().replaceAll("this.", "");
+
 		java.util.List<ASTNode<ASTNode>> list = new LinkedList<ASTNode<ASTNode>>();
 		NodeUtil.recursiveFind_MethodImpl(classDecl, list);
 
@@ -48,11 +50,41 @@ public class ClassContent {
 
 		int base = 0;
 		for (ASTNode<ASTNode> methodImpl : list) {
-			Method current = new Method((MethodImpl) methodImpl,flow);
+			Method current = new Method((MethodImpl) methodImpl, flow);
 			current.renameToIDs(base);
 			methods.add(current);
 			base += 100;
 		}
+		combineMethods();
+	}
+
+	private void combineMethods() {
+		java.util.List<LineState> allStates = new LinkedList<>();
+
+		HashMap<String, LineState> methodRoots = new HashMap<>(methods.size() * 3);
+
+		for (Method method : methods) {
+			allStates.addAll(method.getStates());
+			methodRoots.put(method.getName(), method.getStates().get(0));
+			// The first state is always the root for the method
+		}
+
+		// Finding method calls
+		java.util.List<LineState> methodCallStates = new LinkedList<LineState>();
+
+		for (LineState state : allStates) {
+			ASTNode<ASTNode> statement = state.getStatement();
+			if (statement != null) {
+				if (statement instanceof ExpressionStmt) {
+					// Question: Should we implement some mechanism to accommodate for
+					// sync. and async. calls ?
+					methodCallStates.add(state);
+					String functionName = state.getText().replaceAll("this(.|!)|;", "");
+
+				}
+			}
+		}
+
 	}
 
 	public java.util.List<Method> getMethods() {

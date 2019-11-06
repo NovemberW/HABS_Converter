@@ -10,7 +10,7 @@ public class Starter {
 //		String[] args2 = new String[]{"starter","-f","./exampleFiles/BouncingBall.abs"};
 
 //		String[] args2 = new String[] { "starter", "-f", "./exampleFiles/SimpleTank.abs","-s","test"};
-		String[] args2 = new String[] { "starter", "-f", "./exampleFiles/SimpleTankDuration.abs","-s","test"};
+		String[] args2 = new String[] { "starter", "-f", "./exampleFiles/SimpleTankDuration.abs","","test"};
 //		String[] args2 = new String[] { "starter", "-f", "./exampleFiles/Verkehrssimulation.abs" };
 		fw.work(args2);
 

@@ -81,6 +81,10 @@ public class Method {
 
 		return null;
 	}
+	
+	public java.util.List<LineState> getStates(){
+		return states;
+	}
 	@Override
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
@@ -93,5 +97,13 @@ public class Method {
 			}
 		}
 		return sb.toString();
+	}
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 }
