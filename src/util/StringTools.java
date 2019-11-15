@@ -69,7 +69,7 @@ public class StringTools {
 				{"this.", ""},
 				{"<=", "&lt;="},
 				{">=", "&gt;="},
-				{"&&", "&amp"},
+				{"&&", "&amp;"},
 				{"<", "&lt;"},
 				{">", "&gt;"}
 				
@@ -102,5 +102,25 @@ public class StringTools {
 			assignment = assignment.replaceAll(rep[0],rep[1]);
 		
 		return assignment;
+	}
+	
+	public static String tag(String tag, String parameters, String content) {
+		StringBuffer sb = new StringBuffer();
+		sb.append("<");
+		sb.append(tag);
+		sb.append(" ");
+		sb.append(parameters);
+		sb.append(">\n");
+		String[] contentLines = content.split("\n");
+		for(String line : contentLines) {
+			sb.append("\t");
+			sb.append(line);
+			sb.append("\n");
+			
+		}
+		sb.append("</");
+		sb.append(tag);
+		sb.append(">\n");
+		return sb.toString();
 	}
 }
