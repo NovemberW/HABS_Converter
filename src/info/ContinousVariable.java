@@ -45,6 +45,14 @@ public class ContinousVariable {
 
 	}
 
+	public ContinousVariable(String globalTime) {
+		name = globalTime;
+
+		initialValue = "0";
+		//System.out.println(help.getChild(1).getChild(0) + "'");
+		formula = globalTime + " == 0";
+	}
+
 	private void extractContinousVariable() {
 		ASTNode<ASTNode> var = physicalBlock.getChild(1);
 		String full = physicalBlock.value.toString();

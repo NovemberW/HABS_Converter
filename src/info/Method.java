@@ -15,6 +15,10 @@ public class Method {
 	private String flow;
 
 	private java.util.List<LineState> states;
+	
+	private LineState root;
+	
+	private LineState end;
 
 	public Method(MethodImpl methodImpl, String flow) {
 		String full = methodImpl.getChild(0).value.toString();
@@ -28,15 +32,20 @@ public class Method {
 																											// individual
 																											// statements
 																											// of method
+		
+		root = LineStateFactory.getLineState(null, name,MainDefs.globalTimeInvariant,flow);
 
-		states.add(LineStateFactory.getLineState(null, name,MainDefs.globalTimeInvariant,flow)); // state to start is method declaration
+		states.add(root); // state to start is method declaration
 		int i = 0;
 		while (blockIterator.hasNext()) {// creating one state for each line
 			ASTNode<ASTNode> element = blockIterator.next();
 			states.add(LineStateFactory.getLineState(element, String.valueOf(i++),MainDefs.globalTimeInvariant, flow));
 		}
+		
+		end = LineStateFactory.getLineState(null, "end",MainDefs.globalTimeInvariant,flow);
+		// final state for method is implicit "}" state
 
-		states.add(LineStateFactory.getLineState(null, "end",MainDefs.globalTimeInvariant,flow)); // final state for method is implicit "}" state
+		states.add(end); 
 
 		LineStateFactory.connectStates(states);
 
@@ -105,5 +114,21 @@ public class Method {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public LineState getRoot() {
+		return root;
+	}
+
+	public void setRoot(LineState root) {
+		this.root = root;
+	}
+
+	public LineState getEnd() {
+		return end;
+	}
+
+	public void setEnd(LineState end) {
+		this.end = end;
 	}
 }

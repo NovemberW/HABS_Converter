@@ -82,10 +82,10 @@ public class ContentModel {
 	@Override
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
-
+		
 		for(ClassContent c : classes)
-			sb.append(c.toString());
-
+			sb.append(c.getXMLString());
+		
 		return sb.toString();
 	}
 }

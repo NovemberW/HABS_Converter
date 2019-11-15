@@ -8,7 +8,9 @@ import abs.frontend.ast.ASTNode;
 import abs.frontend.ast.ClassDecl;
 import abs.frontend.ast.ExpressionStmt;
 import abs.frontend.ast.MethodImpl;
+import core.MainDefs;
 import util.NodeUtil;
+import util.StringTools;
 
 public class ClassContent {
 	private java.util.List<Method> methods;
@@ -33,6 +35,8 @@ public class ClassContent {
 		while (it.hasNext())
 			this.physicalBlock.add(new ContinousVariable(it.next()));
 
+		this.physicalBlock.add(new ContinousVariable(MainDefs.globalTimeName));
+
 		StringBuffer sb = new StringBuffer();
 
 		for (int i = 0; i < this.physicalBlock.size() - 1; i++) {
@@ -56,6 +60,7 @@ public class ClassContent {
 			base += 100;
 		}
 		combineMethods();
+
 	}
 
 	private void combineMethods() {
@@ -65,12 +70,12 @@ public class ClassContent {
 
 		for (Method method : methods) {
 			allStates.addAll(method.getStates());
-			methodRoots.put(method.getName(), method.getStates().get(0));
-			// The first state is always the root for the method
+			methodRoots.put(method.getName(), method.getRoot());
 		}
 
 		// Finding method calls
-		java.util.List<LineState> methodCallStates = new LinkedList<LineState>();
+
+		HashMap<String, LineState> methodCalls = new HashMap<>(methods.size() * 3);
 
 		for (LineState state : allStates) {
 			ASTNode<ASTNode> statement = state.getStatement();
@@ -78,13 +83,101 @@ public class ClassContent {
 				if (statement instanceof ExpressionStmt) {
 					// Question: Should we implement some mechanism to accommodate for
 					// sync. and async. calls ?
-					methodCallStates.add(state);
-					String functionName = state.getText().replaceAll("this(.|!)|;", "");
-
+					// Answer:
+					// Future Work nebenläufige prozesse erwähnen
+					methodCalls.put(state.getText().replaceAll("this(.|!)|;", ""), state);
 				}
 			}
 		}
+		/*
+		 * for(String key : methodRoots.keySet()) System.out.println(key);
+		 * System.out.println(); for(String key : methodCalls.keySet())
+		 * System.out.println(key);
+		 */
 
+	}
+
+	public String getStateMachineXML() {
+		StringBuffer sb = new StringBuffer();
+
+		sb.append(this.toString());
+
+		return sb.toString();
+	}
+
+	public String getLowerParameterBlock() {
+
+		StringBuffer sbBinding = new StringBuffer();
+		StringBuffer sbParam = new StringBuffer();
+
+		StringBuffer subSBmap;
+		StringBuffer subSBParam;
+
+		for (ContinousVariable cV : physicalBlock) {
+			// param
+			subSBParam = new StringBuffer();
+			subSBParam.append("<param name=\"");
+			subSBParam.append(cV.getName());
+			subSBParam.append(
+					"\" type=\"real\" local=\"false\" d1=\"1\" d2=\"1\" dynamics=\"any\" controlled=\"true\" />");
+			sbParam.append(subSBParam.toString());
+			sbParam.append("\n");
+
+			// binding
+			subSBmap = new StringBuffer();
+			subSBmap.append(StringTools.tag("map", "key=\"" + cV.getName() + "\"", cV.getName()));
+			sbBinding.append(subSBmap.toString());
+
+		}
+		String bindPart = StringTools.tag("bind", "component=\"main\" as=\"main\" x=\"238.0\" y=\"106.0\"",
+				sbBinding.toString());
+
+		return StringTools.tag("component", "id=\"sys1\"", sbParam.toString() + bindPart.toString());
+
+	}
+
+	public String getUpperParameterBlock() {
+
+		StringBuffer sbParam = new StringBuffer();
+
+		StringBuffer subSBParam;
+
+		for (ContinousVariable cV : physicalBlock) {
+			// param
+			subSBParam = new StringBuffer();
+			subSBParam.append("<param name=\"");
+			subSBParam.append(cV.getName());
+			subSBParam.append(
+					"\" type=\"real\" local=\"false\" d1=\"1\" d2=\"1\" dynamics=\"any\" controlled=\"true\" />");
+			sbParam.append(subSBParam.toString());
+			sbParam.append("\n");
+
+		}
+
+		return sbParam.toString();
+
+	}
+	public String getFirstComponentOfXML() {
+		StringBuffer sb = new StringBuffer();
+
+		sb.append(this.getUpperParameterBlock());
+		sb.append(this.getStateMachineXML());
+		
+		
+
+		return  StringTools.tag("component", "id=\"main\"", sb.toString());
+		
+	}
+
+	public String getXMLString() {
+		StringBuffer sb = new StringBuffer();
+
+		sb.append(this.getFirstComponentOfXML());
+		sb.append(this.getLowerParameterBlock());
+
+		String xmlPrefix = "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>\n";
+		
+		return  xmlPrefix + StringTools.tag("sspaceex", "xmlns=\"http://www-verimag.imag.fr/xml-namespaces/sspaceex\" version=\"0.2\" math=\"SpaceEx\"", sb.toString());
 	}
 
 	public java.util.List<Method> getMethods() {
