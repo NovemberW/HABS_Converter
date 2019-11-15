@@ -3,6 +3,7 @@ package info;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 
 import abs.frontend.ast.ASTNode;
 import abs.frontend.ast.ClassDecl;
@@ -83,17 +84,30 @@ public class ClassContent {
 				if (statement instanceof ExpressionStmt) {
 					// Question: Should we implement some mechanism to accommodate for
 					// sync. and async. calls ?
-					// Answer:
-					// Future Work nebenläufige prozesse erwähnen
-					methodCalls.put(state.getText().replaceAll("this(.|!)|;", ""), state);
+					// Answer:Future Work will take a look into it.
+					// But for now cocurrent tasks are not modeled
+					// This means that sync. and asyns. calls are mapped to
+					methodCalls.put(state.getText().replaceAll("this(.|!)|;|\\(|\\)", ""), state);
 				}
 			}
 		}
-		/*
-		 * for(String key : methodRoots.keySet()) System.out.println(key);
-		 * System.out.println(); for(String key : methodCalls.keySet())
-		 * System.out.println(key);
-		 */
+//		for (String key : methodRoots.keySet())
+//			System.out.println(key);
+//		System.out.println();
+//		for (String key : methodCalls.keySet())
+//			System.out.println(methodCalls.get(key));
+		
+		for(String key : methodCalls.keySet()){
+			LineState call = methodCalls.get(key);
+			
+			List<Transition> newNexts = new LinkedList<Transition>();
+			newNexts.add(new Transition(methodRoots.get(key)));
+			call.setNexts(newNexts);
+			for(Transition n: call.getNexts())
+				System.out.println(n.getTarget());
+		}
+		
+		System.out.println("---");
 
 	}
 
@@ -157,16 +171,15 @@ public class ClassContent {
 		return sbParam.toString();
 
 	}
+
 	public String getFirstComponentOfXML() {
 		StringBuffer sb = new StringBuffer();
 
 		sb.append(this.getUpperParameterBlock());
 		sb.append(this.getStateMachineXML());
-		
-		
 
-		return  StringTools.tag("component", "id=\"main\"", sb.toString());
-		
+		return StringTools.tag("component", "id=\"main\"", sb.toString());
+
 	}
 
 	public String getXMLString() {
@@ -176,8 +189,10 @@ public class ClassContent {
 		sb.append(this.getLowerParameterBlock());
 
 		String xmlPrefix = "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>\n";
-		
-		return  xmlPrefix + StringTools.tag("sspaceex", "xmlns=\"http://www-verimag.imag.fr/xml-namespaces/sspaceex\" version=\"0.2\" math=\"SpaceEx\"", sb.toString());
+
+		return xmlPrefix + StringTools.tag("sspaceex",
+				"xmlns=\"http://www-verimag.imag.fr/xml-namespaces/sspaceex\" version=\"0.2\" math=\"SpaceEx\"",
+				sb.toString());
 	}
 
 	public java.util.List<Method> getMethods() {
