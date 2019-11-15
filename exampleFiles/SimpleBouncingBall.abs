@@ -1,0 +1,18 @@
+module Test;
+
+class Ball (){    
+    physical
+	{		             
+        Rat a = -981/100 : a' = 0;
+		Rat v = 15 : v' = a;
+		Rat x = 10 : x' = v;
+	}
+
+    
+    Unit run()
+    {                        
+        await diff ( x==0 && v<0);
+        v = -v*8/10;      
+        this!run();
+    }
+}
