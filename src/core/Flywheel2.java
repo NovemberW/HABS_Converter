@@ -57,9 +57,14 @@ public class Flywheel2 {
 		
 		try {
 			contentModel.extract(fileName);
+			
 			for(FlagInterface fI : availableFlags)
-				if(fI instanceof FileStoreFlag)
-					((FileStoreFlag) fI).setFileContent(contentModel.toString());
+				if(fI instanceof FileStoreFlag) {
+					FileStoreFlag storage = (FileStoreFlag) fI;
+					storage.setXMLFileContent(contentModel.getXML());
+					storage.setCFGFileContent(contentModel.getCFG());
+//					System.out.println(((FileStoreFlag) fI).getFileName());
+				}
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.exit(-1);

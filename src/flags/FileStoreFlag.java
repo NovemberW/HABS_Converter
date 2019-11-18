@@ -13,18 +13,12 @@ import java.util.Iterator;
 import util.StringTools;
 
 public class FileStoreFlag extends FlagInterface {
-	
+
 	private String fileName = null;
-	
-	public String getFileName() {
-		return fileName;
-	}
 
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
-	}
+	private String xmlFileContent = "";
 
-	private String fileContent = null;
+	private String cfgFileContent = "";
 
 	public FileStoreFlag(java.util.List<FlagInterface> flagList) {
 		super(flagList);
@@ -38,43 +32,81 @@ public class FileStoreFlag extends FlagInterface {
 	public void readArgList(String[] argList) {
 		super.readArgList(argList);
 		int index = StringTools.find(argList, "-" + name);
-		if(index == -1) {
+		if (index == -1) {
 			fileName = "out";
 		}
 		fileName = argList[index + 1];
-		
+
 	}
+
 	@Override
 	public void performe() {
 		if (!isActive)
 			return;
-		File out = new File(fileName + ".xml");
-		if(!out.exists()) {
 
 		PrintWriter writer;
-		try {
-			writer = new PrintWriter(out);
-			writer.write(getFileContent());
-			writer.flush();
-		} catch (IOException e) {
-			System.out.println("Error while writing!");
-			e.printStackTrace();
-		}
-		
-		System.out.println("Storing file");
-		
+
+		File XMLout = new File(fileName + ".xml");
+		if (!XMLout.exists()) {
+
+			try {
+				writer = new PrintWriter(XMLout);
+				writer.write(getXMLFileContent());
+				writer.flush();
+			} catch (IOException e) {
+				System.out.println("Error while writing xml file!");
+				e.printStackTrace();
+			}
+			System.out.println("Storing XML file");
 		}else {
-			System.out.println("File already exists");
+			System.out.println("XML file already exists");
 			System.out.println("Dumping to stdout:\n");
-			System.out.println(getFileContent());
+			System.out.println(getXMLFileContent());
 		}
-	}
-	
-	public String getFileContent() {
-		return fileContent;
+
+		File CFGout = new File(fileName + ".cfg");
+
+		if (!CFGout.exists()) {
+
+			try {
+				writer = new PrintWriter(CFGout);
+				writer.write(getCFGFileContent());
+				writer.flush();
+			} catch (IOException e) {
+				System.out.println("Error while writing cfgwriting!");
+				e.printStackTrace();
+			}
+
+			System.out.println("Storing file");
+
+		} else {
+			System.out.println("Cfg file already exists");
+			System.out.println("Dumping to stdout:\n");
+			System.out.println(getCFGFileContent());
+		}
 	}
 
-	public void setFileContent(String fileContent) {
-		this.fileContent = fileContent;
+	public String getXMLFileContent() {
+		return xmlFileContent;
+	}
+
+	public void setXMLFileContent(String fileContent) {
+		this.xmlFileContent = fileContent;
+	}
+
+	public String getCFGFileContent() {
+		return cfgFileContent;
+	}
+
+	public void setCFGFileContent(String cfgFileContent) {
+		this.cfgFileContent = cfgFileContent;
+	}
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
 	}
 }

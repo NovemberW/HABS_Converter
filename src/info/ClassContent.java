@@ -103,12 +103,8 @@ public class ClassContent {
 			List<Transition> newNexts = new LinkedList<Transition>();
 			newNexts.add(new Transition(methodRoots.get(key)));
 			call.setNexts(newNexts);
-			for(Transition n: call.getNexts())
-				System.out.println(n.getTarget());
 		}
 		
-		System.out.println("---");
-
 	}
 
 	public String getStateMachineXML() {
@@ -217,6 +213,14 @@ public class ClassContent {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public java.util.List<ContinousVariable> getPhysicalBlock() {
+		return physicalBlock;
+	}
+
+	public void setPhysicalBlock(java.util.List<ContinousVariable> physicalBlock) {
+		this.physicalBlock = physicalBlock;
 	}
 
 	@Override
