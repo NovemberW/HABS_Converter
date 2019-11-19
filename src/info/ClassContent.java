@@ -86,19 +86,15 @@ public class ClassContent {
 					// sync. and async. calls ?
 					// Answer:Future Work will take a look into it.
 					// But for now cocurrent tasks are not modeled
-					// This means that sync. and asyns. calls are mapped to
+					// This means that sync. and asyns. calls are mapped to sync. calls
 					methodCalls.put(state.getText().replaceAll("this(.|!)|;|\\(|\\)", ""), state);
 				}
 			}
 		}
-//		for (String key : methodRoots.keySet())
-//			System.out.println(key);
-//		System.out.println();
-//		for (String key : methodCalls.keySet())
-//			System.out.println(methodCalls.get(key));
 		
 		for(String key : methodCalls.keySet()){
 			LineState call = methodCalls.get(key);
+			call.setStatement(null);
 			
 			List<Transition> newNexts = new LinkedList<Transition>();
 			newNexts.add(new Transition(methodRoots.get(key)));
