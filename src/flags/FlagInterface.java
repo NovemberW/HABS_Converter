@@ -17,6 +17,10 @@ public abstract class FlagInterface {
 	public boolean isBefore() {
 		return before;
 	}
+	
+	public boolean isAfter() {
+		return !before;
+	}
 
 	public void setBefore(boolean before) {
 		this.before = before;
