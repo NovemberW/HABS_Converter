@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<sspaceex xmlns="http://www-verimag.imag.fr/xml-namespaces/sspaceex" version="0.2" math="SpaceEx">
+	<component id="main">
+		<param name="a" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+		<param name="v" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+		<param name="x" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+		<param name="global_time" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+		<location id="0" name="_0" x="361.0" y="314.0" width="218.0" height="128.0">
+		<invariant>global_time == 0</invariant>
+		<flow>a' == 0 &amp; v' == a &amp; x' == v &amp; global_time == 0</flow>
+		</location>
+		
+		<transition source="0" target="1">
+		<guard>true </guard>
+		<assignment> </assignment>
+		<labelposition x="-31.0" y="3.0" width="76.0" height="50.0" />
+		<middlepoint x="579.0" y="381.5" />
+		</transition>
+		
+		<location id="1" name="_1" x="361.0" y="314.0" width="218.0" height="128.0">
+		<invariant>global_time == 0</invariant>
+		<flow>a' == 0 &amp; v' == a &amp; x' == v &amp; global_time == 0</flow>
+		</location>
+		
+		<transition source="1" target="2">
+		<guard>(( ( x == 0 ) &amp; ( v &lt; 0 ) )) </guard>
+		<labelposition x="-31.0" y="3.0" width="76.0" height="50.0" />
+		<middlepoint x="579.0" y="381.5" />
+		</transition>
+		
+		<location id="2" name="_2" x="361.0" y="314.0" width="218.0" height="128.0">
+		<invariant>global_time == 0</invariant>
+		<flow>a' == 0 &amp; v' == a &amp; x' == v &amp; global_time == 0</flow>
+		</location>
+		
+		<transition source="2" target="5">
+		<guard>( x == 0 ) </guard>
+		<labelposition x="-31.0" y="3.0" width="76.0" height="50.0" />
+		<middlepoint x="579.0" y="381.5" />
+		</transition>
+		
+		<transition source="2" target="6">
+		<guard>( x != 0 ) </guard>
+		<labelposition x="-31.0" y="3.0" width="76.0" height="50.0" />
+		<middlepoint x="579.0" y="381.5" />
+		</transition>
+		
+		<location id="3" name="_3" x="361.0" y="314.0" width="218.0" height="128.0">
+		<invariant>global_time == 0</invariant>
+		<flow>a' == 0 &amp; v' == a &amp; x' == v &amp; global_time == 0</flow>
+		</location>
+		
+		<transition source="3" target="0">
+		<guard>true </guard>
+		<assignment> </assignment>
+		<labelposition x="-31.0" y="3.0" width="76.0" height="50.0" />
+		<middlepoint x="579.0" y="381.5" />
+		</transition>
+		
+		<location id="4" name="_4" x="361.0" y="314.0" width="218.0" height="128.0">
+		<invariant>global_time == 0</invariant>
+		<flow>a' == 0 &amp; v' == a &amp; x' == v &amp; global_time == 0</flow>
+		</location>
+		
+		<location id="5" name="_5" x="361.0" y="314.0" width="218.0" height="128.0">
+		<invariant>global_time == 0</invariant>
+		<flow>a' == 0 &amp; v' == a &amp; x' == v &amp; global_time == 0</flow>
+		</location>
+		
+		<transition source="5" target="3">
+		<guard>true </guard>
+		<assignment>v := ( ( - v * 8 ) / 10 ) </assignment>
+		<labelposition x="-31.0" y="3.0" width="76.0" height="50.0" />
+		<middlepoint x="579.0" y="381.5" />
+		</transition>
+		
+		<location id="6" name="_6" x="361.0" y="314.0" width="218.0" height="128.0">
+		<invariant>global_time == 0</invariant>
+		<flow>a' == 0 &amp; v' == a &amp; x' == v &amp; global_time == 0</flow>
+		</location>
+		
+		<transition source="6" target="7">
+		<guard>true </guard>
+		<assignment> </assignment>
+		<labelposition x="-31.0" y="3.0" width="76.0" height="50.0" />
+		<middlepoint x="579.0" y="381.5" />
+		</transition>
+		
+		<location id="7" name="_7" x="361.0" y="314.0" width="218.0" height="128.0">
+		<invariant>global_time == 0</invariant>
+		<flow>a' == 0 &amp; v' == a &amp; x' == v &amp; global_time == 0</flow>
+		</location>
+		
+		<transition source="7" target="3">
+		<guard>true </guard>
+		<assignment>v := ( ( - v * 8 ) / 10 ) </assignment>
+		<labelposition x="-31.0" y="3.0" width="76.0" height="50.0" />
+		<middlepoint x="579.0" y="381.5" />
+		</transition>
+	</component>
+	<component id="sys1">
+		<param name="a" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+		<param name="v" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+		<param name="x" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+		<param name="global_time" type="real" local="false" d1="1" d2="1" dynamics="any" controlled="true" />
+		<bind component="main" as="main" x="238.0" y="106.0">
+			<map key="a">
+				a
+			</map>
+			<map key="v">
+				v
+			</map>
+			<map key="x">
+				x
+			</map>
+			<map key="global_time">
+				global_time
+			</map>
+		</bind>
+	</component>
+</sspaceex>
