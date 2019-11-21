@@ -1,27 +1,17 @@
 package core;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import abs.frontend.antlr.parser.ABSParserWrapper;
 import abs.frontend.ast.ASTNode;
-import abs.frontend.ast.CompilationUnit;
-import abs.frontend.ast.List;
-import abs.frontend.ast.Model;
 import flags.FileFlag;
 import flags.FilePrintFlag;
 import flags.FileStoreFlag;
 import flags.FlagInterface;
 import flags.HelpFlag;
 import info.ContentModel;
-import util.ParseHelper;
 
 public class Flywheel2 {
 
