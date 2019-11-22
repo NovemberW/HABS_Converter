@@ -73,6 +73,7 @@ public class NodeUtil {
 		return akku;
 		
 	}
+	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static ASTNode<ASTNode> recursiveFind_PhysicalImpl(ASTNode<ASTNode> node) {
 		if (node == null)
@@ -89,53 +90,4 @@ public class NodeUtil {
 		}
 		return akku;
 	}
-	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static ASTNode<ASTNode> recursiveFind_AwaitStmt(ASTNode<ASTNode> node) {
-		if (node == null)
-			return null;
-		if (node instanceof AwaitStmt) {
-			return node;
-		}
-
-		Iterator<ASTNode> it = node.astChildIterator();
-
-		ASTNode<ASTNode> akku = null;
-		while (it.hasNext() && akku == null) {
-			akku = recursiveFind_AwaitStmt(it.next());
-		}
-		return akku;
-	}
-
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static ASTNode<ASTNode> recursiveFind_DifferentialExp(ASTNode<ASTNode> node) {
-		if (node == null)
-			return null;
-		if (node instanceof DifferentialExp)
-			return node;
-
-		Iterator<ASTNode> it = node.astChildIterator();
-
-		ASTNode<ASTNode> akku = null;
-		while (it.hasNext() && akku == null) {
-			akku = recursiveFind_DifferentialExp(it.next());
-		}
-		return akku;
-	}
-	
-	public static ASTNode<ASTNode> recursiveTraverserFind(@SuppressWarnings("rawtypes") ASTNode node, String startText) {
-		if (node == null)
-			return null;
-		if(node.value.toString().startsWith(startText))
-			return node;
-//		System.out.println(node.value);
-		Iterator<ASTNode> it = node.astChildIterator();
-
-		ASTNode<ASTNode> akku = null;
-		while (it.hasNext() && akku == null) {
-			akku = recursiveTraverserFind(it.next(),startText);
-		}
-		return akku;
-	}
-
 }
