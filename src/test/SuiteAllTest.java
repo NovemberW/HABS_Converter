@@ -8,7 +8,8 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
 		StringUtilTest.class, 
 		NodeUtilTest.class,
-		MethodTest.class     
+		MethodTest.class,
+		ClassTest.class
 })
 
 public class SuiteAllTest {

@@ -14,7 +14,7 @@ class Ball (){
         await diff ( x==0 && v<0);
         if( x == 0){
 	        v = -v*8/10;
-	    }else{
+	    }else{//just for demonstration
 	    	v = -v*8/10;
 	    }      
         this!run();

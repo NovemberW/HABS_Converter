@@ -13,16 +13,18 @@ import org.junit.Test;
 
 import abs.frontend.antlr.parser.ABSParserWrapper;
 import abs.frontend.ast.ASTNode;
+import abs.frontend.ast.ClassDecl;
 import abs.frontend.ast.CompilationUnit;
 import abs.frontend.ast.List;
 import abs.frontend.ast.MethodImpl;
 import abs.frontend.ast.Model;
+import info.ClassContent;
 import info.LineState;
 import info.Method;
 import util.NodeUtil;
 import util.StringTools;
 
-public class MethodTest {
+public class ClassTest {
 	
 	public ASTNode<ASTNode> root;
 
@@ -46,39 +48,16 @@ public class MethodTest {
 	}
 
 	@Test
-	public void methodTest() {
-		String simpleFlow = "x = 54";
-		java.util.List<ASTNode<ASTNode>> list = new LinkedList<ASTNode<ASTNode>>();
-		NodeUtil.recursiveFind_MethodImpl(root, list);
+	public void classTest() {
+		java.util.List<ASTNode<ASTNode>> classes = new LinkedList<ASTNode<ASTNode>>();
+		NodeUtil.recursiveFind_ClassDecl(root, classes);
 		
-		for(ASTNode<ASTNode> e : list)
-			System.out.println(e);
+		ClassContent toTest = new ClassContent((ClassDecl) classes.get(0));
 		
-		Method toTest = new Method((MethodImpl) list.get(0),simpleFlow);//due to previous test we know the type
+		assertEquals(1,toTest.getMethods().size());
+		assertEquals("Ball",toTest.getName());
 		
-		assertEquals("run",toTest.getName());
-		
-		assertNotNull(toTest.getRoot());
-		assertNotNull(toTest.getEnd());
-		
-		java.util.List<LineState> states = toTest.getStates();
-		
-		assertEquals(8, states.size());
-		
-		assertSame(toTest.getRoot(),states.get(0));
-		assertSame(toTest.getEnd(),states.get(4));
-		
-		assertTrue(toTest.getEnd().getNexts().size() == 0);
-		//Note: During the expansion process states with higher ids as the
-		//dedicated end state are generated.
-		
-		for(LineState state : states)
-			assertEquals(simpleFlow, state.getFlow());
-		
-		for(LineState state : states) {
-			LineState carry = state;
-			if(carry != toTest.getEnd() && carry != toTest.getRoot())
-				assertTrue(state.getNexts().size() != 0);
-		}		
+		assertTrue(toTest.getPhysicalBlock().size() == 4);
+		//3 in the file + 1 for global time
 	}
 }
