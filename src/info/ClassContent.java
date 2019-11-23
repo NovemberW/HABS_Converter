@@ -16,7 +16,6 @@ import util.StringTools;
 public class ClassContent {
 	private java.util.List<Method> methods;
 
-	private java.util.List<String> parameter;
 
 	private String name;
 
@@ -24,9 +23,8 @@ public class ClassContent {
 
 	public ClassContent(ClassDecl classDecl) {
 		int firstKomma = classDecl.value.toString().indexOf(",");
-		name = classDecl.value.toString().substring("ClassDecl".length() + 1, firstKomma);
+		name = classDecl.value.toString().substring("ClassDecl".length() + 1, firstKomma).trim();
 
-		parameter = new LinkedList<String>();
 
 		this.physicalBlock = new LinkedList<ContinousVariable>();
 
@@ -193,14 +191,6 @@ public class ClassContent {
 
 	public void setMethods(java.util.List<Method> methods) {
 		this.methods = methods;
-	}
-
-	public java.util.List<String> getParameter() {
-		return parameter;
-	}
-
-	public void setParameter(java.util.List<String> parameter) {
-		this.parameter = parameter;
 	}
 
 	public String getName() {

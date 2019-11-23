@@ -60,9 +60,6 @@ public class ContentModel {
 
 	}
 
-	private void extractFunctions(String[] lines) {
-
-	}
 
 	public static void recursivePrinter(ASTNode node) {
 		if (node == null)
