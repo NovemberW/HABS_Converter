@@ -7,6 +7,20 @@ import abs.frontend.ast.ASTNode;
 import core.MainDefs;
 import util.StringTools;
 
+/*
+ * LineState
+ * 
+ * LineState represents a statement of an HABS-File
+ * in the form of a continuous state.
+ * 
+ * Name: The name that will be used to identify the XML elements when printed
+ * Id: The id that will be used to identify the XML element.
+ * Flow: The flow that will be used when XML printing.
+ * Statement: The ASTNode that is transformed.
+ * Nexts: List of all outgoing transitions. A LineState can have multiple (@see IfStatement)
+ * Test: String representation of Statement. Present in toString() for debugging.
+ * Invariant: The invariant of the LineState.
+ */
 public class LineState implements XMLPrinter {
 
 	protected String name;
@@ -118,6 +132,9 @@ public class LineState implements XMLPrinter {
 			next.getTarget().traversePrint(drain);
 	}
 
+	/*
+	 * Assembles the Linestate as a XML location and all its @Transitions.
+	 */
 	@Override
 	public java.util.List<String> getAsXML() {
 		java.util.List<String> akku = new LinkedList<String>();
@@ -162,6 +179,9 @@ public class LineState implements XMLPrinter {
 		return akku;
 	}
 
+	/*
+	 * Converts the statement of the LineState to the XML assignment in eacht outgoing transition. 
+	 */
 	protected String getAssignmentString() {
 		String assignment = StringTools.convertToTransition(StringTools.getWithPrettyPrint(statement));
 		StringBuffer sb = new StringBuffer();

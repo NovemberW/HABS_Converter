@@ -4,10 +4,22 @@ import abs.frontend.ast.ASTNode;
 import abs.frontend.ast.ExpressionStmt;
 import util.StringTools;
 
+/**
+ * Transition represents an spaceex / xml transition
+ * @author nicholas
+ *
+ */
 public class Transition{
 	
+	/**
+	 * Targate state
+	 */
 	private LineState target;
 	
+	/**
+	 * Guard of the transition (boolean equation)
+	 * Default: true
+	 */
 	private String guard;
 	
 	
