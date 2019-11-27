@@ -20,6 +20,9 @@ import util.StringTools;
  * Nexts: List of all outgoing transitions. A LineState can have multiple (@see IfStatement)
  * Test: String representation of Statement. Present in toString() for debugging.
  * Invariant: The invariant of the LineState.
+ * 
+ * @Note: name and id are connected by the following relation: name = "_" + id
+ * This constrain was introduced to ease work with the output files and debugging.
  */
 public class LineState implements XMLPrinter {
 
@@ -103,6 +106,19 @@ public class LineState implements XMLPrinter {
 
 	}
 
+	/*
+	 * Simple output of LineState and its outgoing
+	 * transitions. 
+	 * 
+	 * Output format:
+	 * 
+	 * STATE: <name>
+	 * Text: <text>
+	 * 	Next: <targetState>	<guard>
+	 * 	Next: <targetState>	<guard>
+	 * 	...
+	 * 
+	 */
 	@Override
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
@@ -125,6 +141,10 @@ public class LineState implements XMLPrinter {
 		return sb.toString();
 	}
 
+	/*
+	 * Debug function for printing the LineState (this) and its outgoing
+	 * transition.
+	 */
 	public void traversePrint(PrintStream drain) {
 		drain.println(this);
 		drain.print("\n");

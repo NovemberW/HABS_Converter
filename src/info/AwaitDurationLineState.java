@@ -6,6 +6,18 @@ import abs.frontend.ast.ASTNode;
 import core.MainDefs;
 import util.StringTools;
 
+/**
+ * 
+ * AwaitDurationLineState
+ * 
+ * @see LineState
+ * 
+ * Represents an await statement. It has one {@link Transition}.
+ * 
+ * 
+ * @author nicholas
+ *
+ */
 public class AwaitDurationLineState extends LineState {
 
 	public AwaitDurationLineState(ASTNode<ASTNode> line, String name, String flow) {

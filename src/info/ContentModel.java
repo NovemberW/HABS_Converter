@@ -21,6 +21,9 @@ import flags.FlagInterface;
 import util.NodeUtil;
 import util.StringTools;
 
+/**
+ * 
+ */
 public class ContentModel {
 
 	private java.util.List<FlagInterface> availableFlags;

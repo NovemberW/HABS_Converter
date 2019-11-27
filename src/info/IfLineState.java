@@ -4,11 +4,20 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import abs.frontend.ast.ASTNode;
-import abs.frontend.ast.NegExp;
-import abs.frontend.ast.PureExp;
 import core.MainDefs;
 import util.StringTools;
 
+
+/*
+ * IfLineState
+ * 
+ * @see LineState
+ * 
+ * Represents an if statement (ASTNode). It has two outgoing @see Transition.
+ * 
+ * Attribute text is "if".
+ * 
+ */
 public class IfLineState extends LineState implements XMLPrinter{
 
 	public IfLineState(ASTNode<ASTNode> line, String name,String invariant,String flow) {
@@ -16,6 +25,9 @@ public class IfLineState extends LineState implements XMLPrinter{
 		text = "if";
 	}
 
+	/*
+	 * Recursively called to extends state to multiple states.
+	 */
 	@Override
 	public void extend() {
 		super.extend();

@@ -8,6 +8,17 @@ import abs.frontend.ast.MethodImpl;
 import core.MainDefs;
 import util.StringTools;
 
+/**
+ * Method
+ * 
+ * Method representation of a method in an HABS class.
+ * 
+ * Name: Name of the method. Used for combining method calls.
+ * Flow: The flow to be used for all LineStates.
+ * States: List of all the LineStates that will represent the method.
+ * Root: The root LineState. Its test is the method name.
+ * End:  Explicit LineState to model the end of the method.
+ */
 public class Method {
 
 	private String name;
@@ -20,6 +31,21 @@ public class Method {
 	
 	private LineState end;
 
+	/*
+	 * Constructor
+	 * 
+	 * Used to build a @see LineState and @see Transition state machine out of 
+	 * given method.
+	 * 
+	 * name is set as name if the methodImpl.
+	 * 
+	 * The states are expanded recursively and renamed with a numerical name starting 
+	 * with 0 as root. 
+	 * 
+	 * 
+	 * @param methodImpl: The ASTNode of type MethodImpl that represents the method.
+	 * @param flow: The flow that will be copied for all LineStates.
+	 */
 	public Method(MethodImpl methodImpl, String flow) {
 		String full = methodImpl.getChild(0).value.toString();
 		name = full.substring(full.indexOf(" "), full.indexOf("(")).trim();
@@ -30,10 +56,8 @@ public class Method {
 
 		Iterator<ASTNode<ASTNode>> blockIterator = methodImpl.getChild(1).getChild(1).astChildIterator();// ==
 																											// individual
-																											// statements
-																											// of method
 		
-		root = LineStateFactory.getLineState(null, name,MainDefs.globalTimeInvariant,flow);
+		root = LineStateFactory.getLineState(null, name,MainDefs.globalTimeInvariant,this.flow);
 
 		states.add(root); // state to start is method declaration
 		int i = 0;
@@ -131,4 +155,13 @@ public class Method {
 	public void setEnd(LineState end) {
 		this.end = end;
 	}
+	
+	public String getFlow() {
+		return flow;
+	}
+
+	public void setFlow(String flow) {
+		this.flow = flow;
+	}
+
 }

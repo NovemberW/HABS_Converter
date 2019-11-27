@@ -6,6 +6,18 @@ import abs.frontend.ast.ASTNode;
 import core.MainDefs;
 import util.StringTools;
 
+/**
+ * 
+ * AwaitDiffLineState
+ * 
+ * @see LineState
+ * 
+ * Represents an await statement. It has one {@link Transition}.
+ * 
+ * 
+ * @author nicholas
+ *
+ */
 public class AwaitDiffLineState extends LineState {
 
 	public AwaitDiffLineState(ASTNode<ASTNode> line, String name, String flow) {
@@ -14,6 +26,7 @@ public class AwaitDiffLineState extends LineState {
 
 	}
 
+	
 	@Override
 	public java.util.List<String> getAsXML() {
 		java.util.List<String> akku = new LinkedList<String>();
