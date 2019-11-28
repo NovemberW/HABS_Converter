@@ -22,7 +22,16 @@ import util.NodeUtil;
 import util.StringTools;
 
 /**
+ * ContentModel
  * 
+ * Representation of the full content of an HABS file / files.
+ * 
+ * AvailableFlags: List of flags that can be used.
+ * 
+ * Classes: List of {@link ClassContent}.
+ * 
+ * @author nicholas
+ *
  */
 public class ContentModel {
 
@@ -75,6 +84,10 @@ public class ContentModel {
 		}
 	}
 
+	/**
+	 * Returns a XML presentation of all classes.
+	 * {@link ClassContent} {@link XMLPrinter}
+	 */
 	public String getXML() {
 		StringBuffer sb = new StringBuffer();
 
@@ -92,6 +105,13 @@ public class ContentModel {
 		return sb.toString();
 	}
 
+	/*
+	 * Standart cfg file for Hyst.
+	 * 
+	 * Uses last variable and globalTime for display.
+	 * 
+	 * Manually changes may be necessary.
+	 */
 	public String makeCFGString() {
 		String defaultConfig = "scenario = supp\n" + "directions = oct\n"
 				+ "set-aggregation = chull\n" + "sampling-time = 0.001\n"

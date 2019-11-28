@@ -13,9 +13,22 @@ import core.MainDefs;
 import util.NodeUtil;
 import util.StringTools;
 
+/**
+ * ClassContent
+ * 
+ * Representation of a HABS class.
+ * 
+ * Methods: List of {@link Method} representing the methods of the class.
+ * Name: String name of the class
+ * PhysicalBlock: List of {@link ContinousVariable} present in the HABS file.
+ * This also contains a global time variable (globalTim).
+ * 
+ * @Note: For now this only supports one class implementation.
+ * @author nicholas
+ *
+ */
 public class ClassContent {
 	private java.util.List<Method> methods;
-
 
 	private String name;
 
@@ -35,6 +48,9 @@ public class ClassContent {
 			this.physicalBlock.add(new ContinousVariable(it.next()));
 
 		this.physicalBlock.add(new ContinousVariable(MainDefs.globalTimeName));
+		
+		//Assemble flow out of all continousVariables present in HABS file
+		//and globalTime.
 
 		StringBuffer sb = new StringBuffer();
 
@@ -46,22 +62,33 @@ public class ClassContent {
 
 		String flow = sb.toString().replaceAll("this.", "");
 
-		java.util.List<ASTNode<ASTNode>> list = new LinkedList<ASTNode<ASTNode>>();
-		NodeUtil.recursiveFind_MethodImpl(classDecl, list);
+		//Extract methods
+		java.util.List<ASTNode<ASTNode>> methodList = new LinkedList<ASTNode<ASTNode>>();
+		NodeUtil.recursiveFind_MethodImpl(classDecl, methodList);
 
 		methods = new LinkedList<Method>();
 
 		int base = 0;
-		for (ASTNode<ASTNode> methodImpl : list) {
+		for (ASTNode<ASTNode> methodImpl : methodList) {
 			Method current = new Method((MethodImpl) methodImpl, flow);
+			//uniquely name LineStates of each method (support up to 99 states per method)
 			current.renameToIDs(base);
 			methods.add(current);
 			base += 100;
 		}
+		
 		combineMethods();
 
 	}
 
+	/**
+	 * Assembles all methods in attribute methods into a state machine.
+	 * 
+	 * The process is based on calls of methods in LineStates.
+	 * 
+	 * This process does not allow to assign local variables, as this
+	 * would require introducing local variable into the states.
+	 */
 	private void combineMethods() {
 		java.util.List<LineState> allStates = new LinkedList<>();
 
@@ -82,8 +109,8 @@ public class ClassContent {
 				if (statement instanceof ExpressionStmt) {
 					// Question: Should we implement some mechanism to accommodate for
 					// sync. and async. calls ?
-					// Answer:Future Work will take a look into it.
-					// But for now cocurrent tasks are not modeled
+					// Answer: Future Work will take a look into it.
+					// But for now concurrent tasks are not modeled
 					// This means that sync. and asyns. calls are mapped to sync. calls
 					methodCalls.put(state.getText().replaceAll("this(.|!)|;|\\(|\\)", ""), state);
 				}
@@ -101,6 +128,10 @@ public class ClassContent {
 		
 	}
 
+	/**
+	 * @return the state machine part of a full XML file.
+	 * Basically Locations and transition.
+	 */
 	public String getStateMachineXML() {
 		StringBuffer sb = new StringBuffer();
 
@@ -109,6 +140,10 @@ public class ClassContent {
 		return sb.toString();
 	}
 
+	/**
+	 * Returns the lower parameter block for the spaceex output file.
+	 * @return That portion.
+	 */
 	public String getLowerParameterBlock() {
 
 		StringBuffer sbBinding = new StringBuffer();
@@ -140,6 +175,10 @@ public class ClassContent {
 
 	}
 
+	/**
+	 * Returns the upper parameter block for the spaceex output file.
+	 * @return That portion.
+	 */
 	public String getUpperParameterBlock() {
 
 		StringBuffer sbParam = new StringBuffer();
@@ -162,6 +201,11 @@ public class ClassContent {
 
 	}
 
+	/**
+	 * Returns the first component for the spaceec output file.
+	 * Contains UpperParameterBlock and state machine.
+	 * @return That portion.
+	 */
 	public String getFirstComponentOfXML() {
 		StringBuffer sb = new StringBuffer();
 
@@ -172,6 +216,10 @@ public class ClassContent {
 
 	}
 
+	/**
+	 * Returns the full content for the spaceex output file.
+	 * @return That content.
+	 */
 	public String getXMLString() {
 		StringBuffer sb = new StringBuffer();
 
