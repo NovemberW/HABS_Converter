@@ -1,6 +1,13 @@
 package flags;
 
 import util.StringTools;
+
+/**
+ * Prints input file.
+ * 
+ * @author nicholas
+ *
+ */
 public class FilePrintFlag extends FlagInterface {
 
 	public FilePrintFlag(java.util.List<FlagInterface> flagList) {
@@ -9,6 +16,9 @@ public class FilePrintFlag extends FlagInterface {
 		manual = "-print to print the file given to -f to be printed";
 	}
 
+	/**
+	 * Prints input file prior to programm run.
+	 */
 	@Override
 	public void performe() {
 		if(!isActive)

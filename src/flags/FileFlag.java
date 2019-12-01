@@ -10,6 +10,14 @@ import java.util.Iterator;
 
 import util.StringTools;
 
+/**
+ * FileFlag
+ * 
+ * FileFlag is used to specifie HABS input file.
+ * 
+ * @author nicholas
+ *
+ */
 public class FileFlag extends FlagInterface {
 	
 	private String fileName = null;

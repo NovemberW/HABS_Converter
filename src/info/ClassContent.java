@@ -218,7 +218,7 @@ public class ClassContent {
 
 	/**
 	 * Returns the full content for the spaceex output file.
-	 * @return That content.
+	 * @return That contentcd.
 	 */
 	public String getXMLString() {
 		StringBuffer sb = new StringBuffer();

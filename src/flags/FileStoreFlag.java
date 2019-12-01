@@ -12,6 +12,11 @@ import java.util.Iterator;
 
 import util.StringTools;
 
+/**
+ * Stores output of conversion into two files. spaceex XML file and standard cfg file.
+ * @author nicholas
+ *
+ */
 public class FileStoreFlag extends FlagInterface {
 
 	private String fileName = null;
@@ -39,6 +44,11 @@ public class FileStoreFlag extends FlagInterface {
 
 	}
 
+	/**
+	 * Stores output into spaceex XML file and into standard cfg file.
+	 * 
+	 * If files already exist output is redirected to console.
+	 */
 	@Override
 	public void performe() {
 		if (!isActive)
