@@ -57,8 +57,8 @@ public class FileStoreFlag extends FlagInterface {
 		PrintWriter writer;
 
 		File XMLout = new File(fileName + ".xml");
+		System.out.println(XMLout.exists());
 		if (!XMLout.exists()) {
-
 			try {
 				writer = new PrintWriter(XMLout);
 				writer.write(getXMLFileContent());
@@ -83,7 +83,7 @@ public class FileStoreFlag extends FlagInterface {
 				writer.write(getCFGFileContent());
 				writer.flush();
 			} catch (IOException e) {
-				System.out.println("Error while writing cfgwriting!");
+				System.out.println("Error while writing cfg file!");
 				e.printStackTrace();
 			}
 

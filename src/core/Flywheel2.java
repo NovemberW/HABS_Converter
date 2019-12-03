@@ -67,8 +67,6 @@ public class Flywheel2 {
 		for(FlagInterface flag: availableFlags) {
 			if(flag.isBefore() == before) {
 				flag.performe();
-			}else {//after
-				flag.performe();
 			}
 		}
 
