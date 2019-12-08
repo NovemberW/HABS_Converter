@@ -10,6 +10,7 @@ import abs.frontend.ast.ClassDecl;
 import abs.frontend.ast.ExpressionStmt;
 import abs.frontend.ast.MethodImpl;
 import core.MainDefs;
+import flags.ManualInvariantFlag;
 import util.NodeUtil;
 import util.StringTools;
 
@@ -18,10 +19,10 @@ import util.StringTools;
  * 
  * Representation of a HABS class.
  * 
- * Methods: List of {@link Method} representing the methods of the class.
- * Name: String name of the class
- * PhysicalBlock: List of {@link ContinousVariable} present in the HABS file.
- * This also contains a global time variable (globalTim).
+ * Methods: List of {@link Method} representing the methods of the class. Name:
+ * String name of the class PhysicalBlock: List of {@link ContinousVariable}
+ * present in the HABS file. This also contains a global time variable
+ * (globalTim).
  * 
  * @Note: For now this only supports one class implementation.
  * @author nicholas
@@ -38,7 +39,6 @@ public class ClassContent {
 		int firstKomma = classDecl.value.toString().indexOf(",");
 		name = classDecl.value.toString().substring("ClassDecl".length() + 1, firstKomma).trim();
 
-
 		this.physicalBlock = new LinkedList<ContinousVariable>();
 
 		ASTNode<ASTNode> physicalBlock = NodeUtil.recursiveFind_PhysicalImpl(classDecl);
@@ -48,9 +48,9 @@ public class ClassContent {
 			this.physicalBlock.add(new ContinousVariable(it.next()));
 
 		this.physicalBlock.add(new ContinousVariable(MainDefs.globalTimeName));
-		
-		//Assemble flow out of all continousVariables present in HABS file
-		//and globalTime.
+
+		// Assemble flow out of all continousVariables present in HABS file
+		// and globalTime.
 
 		StringBuffer sb = new StringBuffer();
 
@@ -62,7 +62,7 @@ public class ClassContent {
 
 		String flow = sb.toString().replaceAll("this.", "");
 
-		//Extract methods
+		// Extract methods
 		java.util.List<ASTNode<ASTNode>> methodList = new LinkedList<ASTNode<ASTNode>>();
 		NodeUtil.recursiveFind_MethodImpl(classDecl, methodList);
 
@@ -71,14 +71,22 @@ public class ClassContent {
 		int base = 0;
 		for (ASTNode<ASTNode> methodImpl : methodList) {
 			Method current = new Method((MethodImpl) methodImpl, flow);
-			//uniquely name LineStates of each method (support up to 99 states per method)
+			// uniquely name LineStates of each method (support up to 99 states per method)
 			current.renameToIDs(base);
 			methods.add(current);
 			base += 100;
 		}
-		
+
 		combineMethods();
 
+		Method run = null;
+
+		for (Method m : methods)
+			if ("run".equals(m.getName()))
+				run = m;
+		run.getRoot().nexts.get(0).setGuard("_FIRST_TRANSITION_ASSIGNMENT_");//CHANGE
+		run.getRoot().setAssignInject(MainDefs.globalTimeTransition);
+		run.getRoot().setInvariant(ManualInvariantFlag.invariantPlaceholder);
 	}
 
 	/**
@@ -86,8 +94,8 @@ public class ClassContent {
 	 * 
 	 * The process is based on calls of methods in LineStates.
 	 * 
-	 * This process does not allow to assign local variables, as this
-	 * would require introducing local variable into the states.
+	 * This process does not allow to assign local variables, as this would require
+	 * introducing local variable into the states.
 	 */
 	private void combineMethods() {
 		java.util.List<LineState> allStates = new LinkedList<>();
@@ -116,21 +124,21 @@ public class ClassContent {
 				}
 			}
 		}
-		
-		for(String key : methodCalls.keySet()){
+
+		for (String key : methodCalls.keySet()) {
 			LineState call = methodCalls.get(key);
 			call.setStatement(null);
-			
+
 			List<Transition> newNexts = new LinkedList<Transition>();
 			newNexts.add(new Transition(methodRoots.get(key)));
 			call.setNexts(newNexts);
 		}
-		
+
 	}
 
 	/**
-	 * @return the state machine part of a full XML file.
-	 * Basically Locations and transition.
+	 * @return the state machine part of a full XML file. Basically Locations and
+	 *         transition.
 	 */
 	public String getStateMachineXML() {
 		StringBuffer sb = new StringBuffer();
@@ -142,6 +150,7 @@ public class ClassContent {
 
 	/**
 	 * Returns the lower parameter block for the spaceex output file.
+	 * 
 	 * @return That portion.
 	 */
 	public String getLowerParameterBlock() {
@@ -177,6 +186,7 @@ public class ClassContent {
 
 	/**
 	 * Returns the upper parameter block for the spaceex output file.
+	 * 
 	 * @return That portion.
 	 */
 	public String getUpperParameterBlock() {
@@ -202,8 +212,9 @@ public class ClassContent {
 	}
 
 	/**
-	 * Returns the first component for the spaceec output file.
-	 * Contains UpperParameterBlock and state machine.
+	 * Returns the first component for the spaceec output file. Contains
+	 * UpperParameterBlock and state machine.
+	 * 
 	 * @return That portion.
 	 */
 	public String getFirstComponentOfXML() {
@@ -218,6 +229,7 @@ public class ClassContent {
 
 	/**
 	 * Returns the full content for the spaceex output file.
+	 * 
 	 * @return That contentcd.
 	 */
 	public String getXMLString() {

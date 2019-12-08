@@ -11,6 +11,7 @@ import flags.FilePrintFlag;
 import flags.FileStoreFlag;
 import flags.FlagInterface;
 import flags.HelpFlag;
+import flags.ManualInvariantFlag;
 import info.ContentModel;
 
 public class Flywheel2 {
@@ -27,6 +28,7 @@ public class Flywheel2 {
 		availableFlags.add(new FileFlag(availableFlags));
 		availableFlags.add(new FilePrintFlag(availableFlags));
 		availableFlags.add(new FileStoreFlag(availableFlags));
+		availableFlags.add(new ManualInvariantFlag(availableFlags));
 			
 	}
 

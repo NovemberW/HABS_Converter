@@ -4,6 +4,7 @@ import java.util.LinkedList;
 
 import abs.frontend.ast.ASTNode;
 import core.MainDefs;
+import flags.ManualInvariantFlag;
 import util.StringTools;
 
 /**

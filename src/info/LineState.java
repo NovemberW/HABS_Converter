@@ -3,6 +3,7 @@ package info;
 import java.io.PrintStream;
 import java.util.LinkedList;
 
+import abs.common.StringUtils;
 import abs.frontend.ast.ASTNode;
 import core.MainDefs;
 import util.StringTools;
@@ -27,9 +28,9 @@ import util.StringTools;
 public class LineState implements XMLPrinter {
 
 	protected String name;
-	
+
 	protected String id;
-	
+
 	protected String flow;
 
 	protected ASTNode<ASTNode> statement;
@@ -37,8 +38,10 @@ public class LineState implements XMLPrinter {
 	protected java.util.List<Transition> nexts;
 
 	protected String text;
-	
+
 	protected String invariant;
+
+	protected String assignInject;
 
 	public String getText() {
 		return text;
@@ -66,7 +69,7 @@ public class LineState implements XMLPrinter {
 				nexts.remove(trans);
 	}
 
-	public LineState(ASTNode<ASTNode> line, String name, String invariant,String flow) {
+	public LineState(ASTNode<ASTNode> line, String name, String invariant, String flow) {
 		this.statement = line;
 		if (line != null)
 			this.text = StringTools.getWithPrettyPrint(line);
@@ -75,7 +78,7 @@ public class LineState implements XMLPrinter {
 
 		this.setName(name);
 		this.setInvariant(invariant);
-		
+
 		this.flow = flow;
 
 		nexts = new LinkedList<Transition>();
@@ -102,21 +105,25 @@ public class LineState implements XMLPrinter {
 		return id;
 	}
 
+	public String getAssignInject() {
+		return assignInject;
+	}
+
+	public void setAssignInject(String assignInject) {
+		this.assignInject = assignInject;
+	}
+
 	public void extend() {
 
 	}
 
 	/*
-	 * Simple output of LineState and its outgoing
-	 * transitions. 
+	 * Simple output of LineState and its outgoing transitions.
 	 * 
 	 * Output format:
 	 * 
-	 * STATE: <name>
-	 * Text: <text>
-	 * 	Next: <targetState>	<guard>
-	 * 	Next: <targetState>	<guard>
-	 * 	...
+	 * STATE: <name> Text: <text> Next: <targetState> <guard> Next: <targetState>
+	 * <guard> ...
 	 * 
 	 */
 	@Override
@@ -128,6 +135,8 @@ public class LineState implements XMLPrinter {
 		sb.append("\n");
 		sb.append("Text: ");
 		sb.append(text);
+		sb.append("\n");
+		sb.append(invariant);
 		sb.append("\n");
 
 		for (Transition next : nexts) {
@@ -142,8 +151,7 @@ public class LineState implements XMLPrinter {
 	}
 
 	/*
-	 * Debug function for printing the LineState (this) and its outgoing
-	 * transition.
+	 * Debug function for printing the LineState (this) and its outgoing transition.
 	 */
 	public void traversePrint(PrintStream drain) {
 		drain.println(this);
@@ -160,24 +168,24 @@ public class LineState implements XMLPrinter {
 		java.util.List<String> akku = new LinkedList<String>();
 
 		StringBuffer sb = new StringBuffer();
-		
+
 		sb.append("<location id=\"");
 		sb.append(this.id);
 		sb.append("\" name=\"");
 		sb.append(this.name);
 		sb.append("\" x=\"361.0\" y=\"314.0\" width=\"218.0\" height=\"128.0\">\n");
 		sb.append("<invariant>");
-		sb.append(MainDefs.globalTimeInvariant);
+		sb.append(invariant);
 		sb.append("</invariant>\n");
 		sb.append("<flow>");
 		sb.append(this.flow);
 		sb.append("</flow>\n");
 		sb.append("</location>\n");
-		
+
 		akku.add(sb.toString());
 
 		String transitionAssignment = getAssignmentString();
-		
+
 		for (Transition trans : nexts) {
 			sb = new StringBuffer();
 			sb.append("<transition source=\"");
@@ -186,7 +194,7 @@ public class LineState implements XMLPrinter {
 			sb.append("\" target=\"");
 			sb.append(trans.getTarget().getId());
 			sb.append("\">\n");
-			sb.append("<guard>");
+			sb.append("<guard>\n");
 			sb.append(StringTools.parseToXML(trans.getGuardValue()));
 			sb.append(" </guard>\n");
 			sb.append(transitionAssignment);
@@ -200,16 +208,23 @@ public class LineState implements XMLPrinter {
 	}
 
 	/*
-	 * Converts the statement of the LineState to the XML assignment in eacht outgoing transition. 
+	 * Converts the statement of the LineState to the XML assignment in eacht
+	 * outgoing transition.
 	 */
 	protected String getAssignmentString() {
-		String assignment = StringTools.convertToTransition(StringTools.getWithPrettyPrint(statement));
-		StringBuffer sb = new StringBuffer();
-		
-		sb.append("<assignment>");
-		sb.append(assignment);
-		sb.append(" </assignment>\n");
-		return sb.toString();
+		/*
+		 * String assignment =
+		 * StringTools.convertToTransition(StringTools.getWithPrettyPrint(statement));
+		 * StringBuffer sb = new StringBuffer();
+		 * 
+		 * sb.append("<assignment>"); sb.append(assignment);
+		 * sb.append(" </assignment>\n");
+		 */
+		String add = "";
+		if (assignInject != null)
+			add = "\n" + assignInject;
+		return StringTools.tag("assignment", "",
+				StringTools.convertToTransition(StringTools.getWithPrettyPrint(statement)) + add);// MainDefs.globalTimeTransition);
 	}
 
 	public String getInvariant() {
@@ -219,7 +234,7 @@ public class LineState implements XMLPrinter {
 	public void setInvariant(String invariant) {
 		this.invariant = invariant;
 	}
-	
+
 	public String getFlow() {
 		return flow;
 	}

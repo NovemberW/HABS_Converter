@@ -40,7 +40,7 @@ public class ContinousVariable {
 	public ContinousVariable(String globalTime) {
 		name = globalTime;
 		initialValue = "0";
-		formula = globalTime + " == 0";
+		formula = globalTime + "' == 1";
 	}
 
 	private void extractContinousVariable() {

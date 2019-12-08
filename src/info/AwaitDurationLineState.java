@@ -38,7 +38,7 @@ public class AwaitDurationLineState extends LineState {
 		sb.append(this.name);
 		sb.append("\" x=\"361.0\" y=\"314.0\" width=\"218.0\" height=\"128.0\">\n");
 		sb.append("<invariant>");
-		sb.append(MainDefs.globalTimeInvariant);
+		sb.append(this.invariant);//MainDefs.globalTimeInvariant);//TODO: Based on semantic -> Weak negation not defined
 		sb.append("</invariant>\n");
 		sb.append("<flow>");
 		sb.append(this.flow);
